@@ -2,7 +2,7 @@
 
 Write for a reviewer who knows the product but not this code. The first two sections are plain English: no class, method, file or field names, no library internals. Someone should understand the problem and the fix from them alone, without reading further. Technical detail comes after, for those who want it.
 
-Keep each section to what a reviewer needs. Skip a section only if it would be empty. Follow the repo's own PR template if it has one, fitting these sections into it.
+Some hosts cap the length (Azure DevOps: 4,000 characters). Over it, cut from Technical changes and Evidence first, never the first two sections. Keep each section to what a reviewer needs. Skip a section only if it would be empty. Follow the repo's own PR template if it has one, fitting these sections into it.
 
 ```markdown
 ## Problem
