@@ -84,7 +84,7 @@ Local worktrees come first. Each slice is self-contained (brief, verification an
 
 ## Measures
 
-Checked weekly: merged slices, median change size, review minutes, corrections per slice, reverts or defects after landing, and discarded sessions. Concurrency changes only when these are steady.
+Checked weekly: merged slices, cost per slice (from `scripts/cost.py`), median change size, review minutes, corrections per slice, reverts or defects after landing, and discarded sessions. Concurrency changes only when these are steady.
 
 ## Components
 
@@ -96,7 +96,8 @@ Checked weekly: merged slices, median change size, review minutes, corrections p
 | Slice | `slice` skill |
 | Run | `dispatch` skill, `worker` agent |
 | Verify | `verify` skill, `reviewer` agent |
+| Impact | `impact` skill, on the plan (frame) and on each landing (land) |
 | Land | `land` skill (includes explain-diff) |
-| Compound | `compound` skill |
+| Compound | `compound` skill, with `scripts/cost.py` for each work item's cost |
 | Status and resume | `status` skill |
 | Side work | `scout` and `researcher` agents, `cleanup` skill |

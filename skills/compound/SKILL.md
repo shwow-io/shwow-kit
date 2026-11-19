@@ -10,7 +10,7 @@ Make the next piece of work easier than this one. Every mistake the user had to 
 
 ## 1. Gather
 
-From the work item: `notes.md` (deviations, decisions), `evidence/*-review.md` (blocking findings), blocked or re-run slices. From the session: corrections the user made, things they had to repeat, instructions the agent ignored.
+From the work item: `notes.md` (deviations, decisions), `evidence/*-review.md` (blocking findings), `evidence/*-impact.md` (breaks found late or missed), blocked or re-run slices. Run `python ${CLAUDE_PLUGIN_ROOT}/scripts/cost.py <slug>` and save its output to `evidence/cost.md`; a slice that cost several times the others is a lesson to look at (too big, unclear, flaky checks, too many review rounds). From the session: corrections the user made, things they had to repeat, instructions the agent ignored.
 
 ## 2. Pick what matters
 
@@ -33,7 +33,7 @@ Show the user a short list: lesson, proposed fix, where. Apply only what they ap
 
 ## Measures
 
-Append one line to `~/.shwow-kit/metrics.md` when you show the proposals, whether or not any are approved: date, work item, tier, slices, review rounds, corrections, reverts or defects found later (fill in later if unknown). This is what tells the user whether to run more in parallel.
+Append one line to `~/.shwow-kit/metrics.md` when you show the proposals, whether or not any are approved: date, work item, tier, slices, review rounds, corrections, estimated cost (US$, from `evidence/cost.md`), reverts or defects found later (fill in later if unknown). This is what tells the user whether to run more in parallel.
 
 ## Talking to the user
 

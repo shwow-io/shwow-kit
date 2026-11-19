@@ -25,6 +25,8 @@ Write `brief.md` in the work item using `${CLAUDE_PLUGIN_ROOT}/skills/frame/brie
 
 For T2, also write `design.md`: the interfaces between repos or components, key decisions with the alternatives rejected, and risks. The user owns these decisions; propose, don't decide.
 
+When the work changes a contract, stored data, config or deploys, or touches another repo (always for T2), run the `impact` skill on the plan before confirming the brief. Breaking changes it finds become constraints in the brief or decisions for the user, so the design avoids them.
+
 Show the user the brief and confirm it. Once the brief is agreed, move to the `acceptance` skill.
 
 ## Don't

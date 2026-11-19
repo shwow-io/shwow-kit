@@ -16,6 +16,8 @@ Every slice in the landing is done (State in `${CLAUDE_PLUGIN_ROOT}/docs/work-it
 
 Then check the landing as a whole, in its worktree: rebase or merge the current main line in if it has moved, and run every slice's verify command plus the repo's fast checks. Save the output to `evidence/<landing>-checks.txt`. A failure here goes back to `dispatch` as a fix slice, not to the user.
 
+Then run the `impact` skill on the landing's diff against the main line (subagents described as `<slug> <landing> impact`). Its open breaking changes and risks, and its deploy steps, become steps in the user's **Needs you** list.
+
 ## 2. Explain the diff
 
 Explain the landing's diff against the main line:
@@ -24,6 +26,8 @@ Explain the landing's diff against the main line:
 - A walk through the diff in reading order (entry point first), grouped by purpose, with `path:line` references. Mention what was deliberately left alone.
 - Anything surprising: deviations from `notes.md`, reviewer "should fix" items not addressed, risks.
 - What the user has to do after it ships (live checks, keys, accounts), from the slices' notes.
+- The impact verdict (`evidence/<landing>-impact.md`): breaking or not, and what its safety rests on.
+- What it cost so far: the total line from `python ${CLAUDE_PLUGIN_ROOT}/scripts/cost.py <slug>`.
 
 Keep it short enough to read in a few minutes.
 

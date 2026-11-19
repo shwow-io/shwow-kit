@@ -34,7 +34,7 @@ Create worktrees yourself before starting a worker, so paths and branches are kn
 
 ## Start workers
 
-Start one `worker` subagent per slice, in parallel, in the background. Give each the slice file path, the work item path, its worktree path and branch, and the instruction to work only inside that worktree.
+Start one `worker` subagent per slice, in parallel, in the background, with the description `<slug> <slice-id> worker` (the cost log matches on it). Give each the slice file path, the work item path, its worktree path and branch, and the instruction to work only inside that worktree.
 
 Add the work item's row to `~/.shwow-kit/work/index.md` if it's missing. Don't write any status.
 

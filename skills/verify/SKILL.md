@@ -22,7 +22,7 @@ Save the commands and their output to `evidence/<slice-id>-checks.txt` in the wo
 
 ## 2. Independent review
 
-Start the `reviewer` subagent with the diff, the slice, `brief.md` and `acceptance.md`. Don't pass it the author's reasoning or your opinion. Save its findings verbatim to `evidence/<slice-id>-review.md`; a slice can't be merged without that file.
+Start the `reviewer` subagent, described as `<slug> <slice-id> review` (the cost log matches on it), with the diff, the slice, `brief.md` and `acceptance.md`. Don't pass it the author's reasoning or your opinion. Save its findings verbatim to `evidence/<slice-id>-review.md`; a slice can't be merged without that file.
 
 For T0 work, a reviewer is optional when the change is tiny and fully covered by a failing-then-passing test; otherwise use one.
 
