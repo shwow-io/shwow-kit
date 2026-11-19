@@ -1,25 +1,33 @@
 # PR description
 
+Write for a reviewer who knows the product but not this code. The first two sections are plain English: no class, method, file or field names, no library internals. Someone should understand the problem and the fix from them alone, without reading further. Technical detail comes after, for those who want it.
+
 Keep each section to what a reviewer needs. Skip a section only if it would be empty. Follow the repo's own PR template if it has one, fitting these sections into it.
 
 ```markdown
-## What and why
+## Problem
 
-<two or three sentences, in terms of behaviour>
+<What goes wrong today, or would go wrong without this change, and who or what it affects. Concrete consequences ("customers get the email twice"), not mechanisms. Where this change fits in a larger piece of work, in one line.>
 
-<the smallest picture that makes the change clear: a call tree, a diff sketch of the flow or file layout, or a mermaid diagram. One, rarely two.>
+## How this fixes it
+
+<One bullet per idea, each a plain sentence about behaviour ("each event is processed once: a repeat is acknowledged and skipped"). What users or operators will notice, if anything.>
+
+## Risk
+
+**Can be undone:** <yes, by reverting | partly: what stays behind | no: what can't be undone>
+**If it's wrong:** <what breaks and for whom, in plain words>
+**Breaking for others:** <no | yes, what and for whom> (from the impact report)
+
+## Technical changes
+
+<The smallest picture that makes the change clear (a call tree, a diff sketch of the flow, or a mermaid diagram), then short bullets per area, with names. This is where class, file and field names go.>
 
 ## Evidence
 
 - Before: <the failing test or check, the wrong output>
 - After: <the same run passing>
 - <other checks run on the whole landing, with results>
-
-## Impact
-
-**Breaking:** <no | yes, what and for whom> (from the impact report)
-**Blast radius:** <who or what is affected if this is wrong>
-**Can be undone:** <yes, by reverting | no: what can't be undone, e.g. a migration that drops data, an external call>
 
 ## Shipping
 

@@ -25,7 +25,7 @@ Then, in parallel:
 
 Explain the landing's diff against the main line:
 
-- What changed and why, in a few sentences, in terms of behaviour.
+- The problem and how this fixes it, in plain English with no code names, so it can be understood without reading the diff.
 - A walk through the diff in reading order (entry point first), grouped by purpose, with `path:line` references. Mention what was deliberately left alone.
 - Anything surprising: deviations from `notes.md`, reviewer "should fix" items not addressed (slice and landing reviews), risks.
 - What the user has to do after it ships (live checks, keys, accounts), from the slices' notes.
