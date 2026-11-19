@@ -58,3 +58,5 @@ Start every message to the user with one of these, before anything else:
 - `**Nothing needed from you.**` then one line on what is running and what you'll report next.
 
 Details (explanations, diffs, evidence) go below, after a blank line. Never put a request for the user only in the details, and never end with a bare "OK?".
+
+While anything is still waiting on the user, every later message repeats the full **Needs you** list as first written: each step's options, recommendation, commands and what to reply, not a shortened version. The user may come back after a while and read only the last message; they should never have to scroll up to find what's asked.
