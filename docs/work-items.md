@@ -33,6 +33,7 @@ Status: `framing`, `slicing`, `running`, `landing`, `done`, `parked`. Update the
   verification.md   how each repo involved is verified (acceptance, reused by verify)
   design.md         T2 only: interfaces, decisions, blind spots (frame)
   slices/NN-<name>.md
+  landings.md       groups of slices that ship together, their branches and status (slice)
   notes.md          deviations, decisions, corrections made during the work
   evidence/         command output, screenshots, review findings
 ```

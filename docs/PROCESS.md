@@ -27,13 +27,13 @@ Agents write code faster than anyone can check it, so the amount of work that ca
 | 0 | **Triage**: size it, pick a tier, decide where the work lives | agent, human confirms | tier, work item |
 | 1 | **Frame**: the agent interviews the human until problem, outcome, non-goals and constraints are clear | human + agent | `brief.md` (one page max) |
 | 2 | **Pin done**: turn the brief into concrete examples and failing acceptance checks; the human reviews these, not a long plan | agent, human approves | acceptance checks |
-| 3 | **Slice**: thin vertical slices in dependency order, each with its verification, the area it touches, AFK or HITL, and whether it needs running services; each sized for about 30 minutes of review | agent, human skims | `slices/NN-*.md` |
+| 3 | **Slice**: thin vertical slices in dependency order, each with its verification, the area it touches, AFK or HITL, and whether it needs running services; grouped into landings (each one PR or one push), at least one per repo | agent, human confirms | `slices/NN-*.md`, `landings.md` |
 | 4 | **Run**: one worker per slice in its own worktree, about 3 at once; test first; stop and report after two failed attempts; log deviations | agents | branch, `notes.md` |
-| 5 | **Verify**: run the slice's verification and record evidence; a fresh-context reviewer checks against the brief and acceptance checks, ignoring style | agents | evidence, review findings |
-| 6 | **Land**: the agent explains the diff; review depth scales with risk; integrate the way the repo does it | human | merged change |
+| 5 | **Verify**: run the slice's verification and record evidence; a fresh-context reviewer checks against the brief and acceptance checks, ignoring style; approved slices merge into their landing branch without asking | agents | evidence, review findings |
+| 6 | **Land**: check the landing as a whole, explain the diff; review depth scales with risk; open the PR, or push to the main line once the human approves | human | shipped landing |
 | 7 | **Compound**: what needed correcting, and where should the fix live? | agent proposes, human approves | updated tests, checks or skills |
 
-Human attention goes to steps 1, 2 and 6; steps 4 and 5 run in parallel. Don't start new slices while three outputs are waiting for review.
+Human attention goes to steps 1, 2, 3 (confirming the slices and landings, which is the go-ahead to build) and 6. Between 3 and 6 agents run unattended: they build, verify, commit and merge each AFK slice into its landing branch, and stop only for a HITL decision, a blocked slice, or a landing ready to ship. Pushing to or merging into a default branch always waits for the human. Don't start new slices while three landings are waiting on the human.
 
 **AFK / HITL:** AFK slices are well specified and verifiable, so an agent can run them alone. HITL slices need a human decision partway through.
 
@@ -51,7 +51,7 @@ Contents of a work item: `brief.md`, `slices/`, `notes.md` (deviations and decis
 
 ## Isolation
 
-- Parallel writers get their own git worktree outside the working directory (`~/.shwow-kit/worktrees/<repo>/<slice>`), removed after landing. If the repo already has a worktree layout, the agent may follow it instead.
+- Parallel writers get their own git worktree outside the working directory (`~/.shwow-kit/worktrees/<repo>/<slice>`), removed once merged into the landing branch. If the repo already has a worktree layout, the agent may follow it instead.
 - Read-only agents (scout, reviewer) work without a worktree.
 - Slices that need running services (ports, databases) declare it and don't run in parallel with each other.
 - Agents work out the repo layout (plain clone, bare with worktrees, monorepo) from what they see; the kit assumes none.
@@ -68,7 +68,7 @@ How a repo verifies is recorded in the work item (or in the repo's own docs if i
 
 ## Integrating changes
 
-The agent follows the repo's existing conventions: branch protection, CONTRIBUTING, PR templates, history. With no clear convention, it defaults to a branch and a PR. It commits directly only when the repo clearly works that way and the change is low risk and easy to revert. In every case the land step (evidence, explanation, review scaled to risk) happens first.
+Work ships in landings, planned at slice time: a large build can be split into several, and multi-repo work has at least one per repo, so a repo that finishes early ships early. Each landing integrates the way its repo does (branch protection, CONTRIBUTING, PR templates, history). With no clear convention, it defaults to a PR. It goes directly to the main line only when the repo clearly works that way and the change is low risk and easy to revert. Agents commit, merge slices into landing branches, push those branches and open PRs on their own; pushing to or merging into the default branch is the human's call. In every case the land step (whole-landing checks, explanation, review scaled to risk) happens first.
 
 ## Parallel and cloud
 

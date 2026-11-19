@@ -4,6 +4,7 @@ title: <short title>
 mode: AFK | HITL
 depends_on: []
 repo: <repo name or path>
+landing: <landing name from landings.md>
 touches: [<paths or areas>]
 needs_services: false
 status: todo

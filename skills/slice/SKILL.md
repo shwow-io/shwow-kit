@@ -17,13 +17,31 @@ Turn the brief into work that agents can run, mostly in parallel, and that the u
 - **AFK or HITL.** AFK: specified and verifiable enough for an agent to finish alone. HITL: needs a human decision or judgement partway. Prefer AFK; when a slice is HITL, say what decision is needed.
 - **Services.** Whether verifying it needs running services (database, ports, external systems). Such slices don't run in parallel with each other.
 
+## Landings
+
+A landing is a group of slices that ships together: one PR, or one push to the main line. Slices are merged into their landing's branch as they pass verification, with no user step; the user's gate is the landing. Plan them now:
+
+- **At least one per repo,** so a repo whose slices finish early ships without waiting for the others.
+- **Split a large build** into several landings when one would be too big to review in one sitting (more than about five slices, or several hundred changed lines), or when part of it is worth shipping early. Each landing must work on its own once merged, so split along the dependency order: no landing depends on a later one.
+- **One landing** is the default for a small build in one repo.
+- **How each integrates,** from the repo's conventions (see the `land` skill, step 4): PR or direct to the main line.
+
+Write them to `landings.md` in the work item:
+
+```
+| landing | repo | branch | slices | integrates by | status |
+```
+
+Branch: `<type>/<work-item>` or `<type>/<work-item>-<landing>` (or the repo's convention). Status: `building`, `ready`, `waiting` (PR open, or a push awaiting the user), `shipped`. Set each slice's `landing` field to match.
+
 ## Steps
 
 1. Read `brief.md`, `acceptance.md`, `verification.md` (and `design.md` for T2) from the work item.
 2. Look at the code enough to know where each slice lands. Use a `scout` subagent for broad exploration.
 3. Write one file per slice in `slices/`, named `NN-<short-name>.md`, using `${CLAUDE_PLUGIN_ROOT}/skills/slice/slice-template.md`. Number in dependency order, starting at 01. No other files in `slices/`.
-4. Check coverage: every acceptance example is covered by at least one slice; every slice traces back to the brief. Flag anything that doesn't.
-5. Show the user a short table: slice, mode, depends on, parallel-safe. Ask them to confirm, reorder or merge. Then set the index row to `running`, adding the row if the work item has none.
+4. Group the slices into landings and write `landings.md`.
+5. Check coverage: every acceptance example is covered by at least one slice; every slice traces back to the brief. Flag anything that doesn't.
+6. Show the user a short table: slice, mode, depends on, parallel-safe, landing. Ask them to confirm, reorder, merge or regroup. Their confirmation is the go-ahead for agents to build, commit and merge every AFK slice into its landing branch without asking again. Then set the index row to `running`, adding the row if the work item has none, and invoke `dispatch`.
 
 ## Don't
 

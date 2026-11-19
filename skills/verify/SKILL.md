@@ -22,14 +22,14 @@ Save the commands and their output to `evidence/<slice-id>-checks.txt` in the wo
 
 ## 2. Independent review
 
-Start the `reviewer` subagent with the diff, the slice, `brief.md` and `acceptance.md`. Don't pass it the author's reasoning or your opinion. Save its findings verbatim to `evidence/<slice-id>-review.md`; a slice can't reach `landing` without that file.
+Start the `reviewer` subagent with the diff, the slice, `brief.md` and `acceptance.md`. Don't pass it the author's reasoning or your opinion. Save its findings verbatim to `evidence/<slice-id>-review.md`; a slice can't be merged without that file.
 
 For T0 work, a reviewer is optional when the change is tiny and fully covered by a failing-then-passing test; otherwise use one.
 
 ## 3. Decide
 
-- **Checks pass and review approves:** set the slice to `landing` and tell the user it's ready to land (`/shwow-kit:land <slug> <slice-id>`). Don't merge here.
-- **Anything blocking:** list it, set the slice back to `running`, and send the findings to the worker (or the user for HITL). Two rounds of review failures on the same slice means stop and ask the user.
+- **Checks pass and review approves:** the slice is ready to merge into its landing branch. Under `dispatch`, return to it; it merges without asking the user. Run on its own (no work item, or a T0 fix), hand over to the `land` skill.
+- **Anything blocking:** list it, set the slice back to `running`, and send the findings to the worker (or the user for HITL). The fix comes back through this skill with a fresh reviewer every round; don't approve a fix yourself. A slice still failing after its second fix round is `blocked`: stop and ask the user.
 
 ## Report
 
