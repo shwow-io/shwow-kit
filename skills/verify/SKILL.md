@@ -10,7 +10,7 @@ No change lands on a claim. It lands on evidence.
 
 ## 1. Run checks
 
-In the change's worktree. If it has none, create a temporary one with `git worktree add` and remove it when done; never switch branches or edit files in the user's checkout. In order of preference:
+In the change's worktree. If it has none, create a temporary one at `~/.shwow-kit/worktrees/<checkout>/verify-<id>` with `git worktree add --detach`, and remove it with `git worktree remove --force` when done (never anywhere else, least of all a drive root); never switch branches or edit files in the user's checkout. In order of preference:
 
 1. **Existing checks** that cover the change: the slice's verify command, related tests, lint, typecheck, build. Take commands from the work item's `verification.md`; if there isn't one, discover them (AGENTS.md, CLAUDE.md, README, CI config, build files) and record what you found in `verification.md`.
 2. **A new check** if nothing existing covers the change: a test, a script, or a command with expected output. Add it to the repo if it belongs there.

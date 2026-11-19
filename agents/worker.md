@@ -21,6 +21,7 @@ Read the slice, then `brief.md`, `acceptance.md`, `verification.md` and `notes.m
 
 - Never edit or delete acceptance tests to make them pass. If one looks wrong, stop and report.
 - Stay inside the slice's outcome and `touches`. Handling inputs the brief or existing validation rules out is extra scope: leave it out or record it in `notes.md`. Note anything else you notice in your report instead of fixing it.
+- If the slice is a bug fix whose cause isn't proven, or a test fails for a reason you can't explain, find the cause first as `${CLAUDE_PLUGIN_ROOT}/skills/diagnose/SKILL.md` describes, inside your worktree.
 - If an attempt fails, think about why before retrying. After two failed attempts at the same problem, stop and report: what you tried, what happened, your best guess at the cause.
 - Record any deviation from the slice or brief, and any decision you had to make, in `notes.md` under the slice's id.
 

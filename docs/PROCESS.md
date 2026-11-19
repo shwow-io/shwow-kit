@@ -90,13 +90,14 @@ Checked weekly: merged slices, cost per slice (from `scripts/cost.py`), median c
 
 | Step | Component |
 | --- | --- |
-| Triage | `triage` skill |
+| Triage | `triage` skill; `diagnose` skill for bugs whose cause isn't proven |
 | Frame | `frame` skill |
 | Pin done | `acceptance` skill |
 | Slice | `slice` skill |
 | Run | `dispatch` skill, `worker` agent |
 | Verify | `verify` skill, `reviewer` agent |
 | Impact | `impact` skill, on the plan (frame) and on each landing (land) |
+| Landing sign-off | `land` skill: whole-landing checks, spec and standards reviews (`reviewer`), impact, PR from `pr-template.md` |
 | Land | `land` skill (includes explain-diff) |
 | Compound | `compound` skill, with `scripts/cost.py` for each work item's cost |
 | Status and resume | `status` skill |

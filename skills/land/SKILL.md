@@ -16,7 +16,10 @@ Every slice in the landing is done (State in `${CLAUDE_PLUGIN_ROOT}/docs/work-it
 
 Then check the landing as a whole, in its worktree: rebase or merge the current main line in if it has moved, and run every slice's verify command plus the repo's fast checks. Save the output to `evidence/<landing>-checks.txt`. A failure here goes back to `dispatch` as a fix slice, not to the user.
 
-Then run the `impact` skill on the landing's diff against the main line (subagents described as `<slug> <landing> impact`). Its open breaking changes and risks, and its deploy steps, become steps in the user's **Needs you** list.
+Then, in parallel:
+
+- **Landing review:** two `reviewer` subagents on the landing's diff against the main line, one asked for the spec review and one for the standards review (described as `<slug> <landing> review-spec` and `<slug> <landing> review-standards`). Give them the diff, `brief.md`, `acceptance.md`, `landings.md` and the slice files, not the notes or your opinion. Save both verbatim, under separate headings, to `evidence/<landing>-review.md`. Report the two side by side; don't merge or rerank them. Blocking findings go back to `dispatch` as a fix slice in this landing (and through `verify`), then this step runs again; a landing still blocked after two rounds goes to the user. Skip it for a one-slice landing whose slice review already ran on the same diff, unless it's high risk.
+- **Impact:** the `impact` skill on the same diff (subagents described as `<slug> <landing> impact`). Its open breaking changes and risks, and its deploy steps, become steps in the user's **Needs you** list.
 
 ## 2. Explain the diff
 
@@ -24,7 +27,7 @@ Explain the landing's diff against the main line:
 
 - What changed and why, in a few sentences, in terms of behaviour.
 - A walk through the diff in reading order (entry point first), grouped by purpose, with `path:line` references. Mention what was deliberately left alone.
-- Anything surprising: deviations from `notes.md`, reviewer "should fix" items not addressed, risks.
+- Anything surprising: deviations from `notes.md`, reviewer "should fix" items not addressed (slice and landing reviews), risks.
 - What the user has to do after it ships (live checks, keys, accounts), from the slices' notes.
 - The impact verdict (`evidence/<landing>-impact.md`): breaking or not, and what its safety rests on.
 - What it cost so far: the total line from `python ${CLAUDE_PLUGIN_ROOT}/scripts/cost.py <slug>`.
@@ -43,7 +46,7 @@ Say which level applies and why.
 
 Use the method in `landings.md`. If it isn't set, decide from the repo's conventions: branch protection, CONTRIBUTING, PR templates, and `git log --first-parent -20` on the main line. Merge commits from branches mean merge this branch the same way; only direct commits and no merges mean the repo works directly on main. A remote that can't host PRs (a local or bare path, no GitHub/Azure DevOps/GitLab remote) rules out a PR. With mixed history and a PR-capable remote, use a PR.
 
-- **PR:** push the landing branch and open the PR without asking; it changes nothing on the main line. The description states what changed, why, how it was verified (summarise the evidence) and anything the reviewer should look at. Give the user the link. The user merges, or tells you to.
+- **PR:** push the landing branch and open the PR without asking; it changes nothing on the main line. Write the description from `${CLAUDE_PLUGIN_ROOT}/skills/land/pr-template.md`, filled from the evidence, the impact report and `landings.md`. Give the user the link. The user merges, or tells you to.
 - **Direct to the main line:** only when the repo clearly works that way and the change is low risk and easy to revert. Show the explanation and ask the user to approve the push. Push only after they say so.
 
 Pushing to or merging into the default branch always needs the user's approval of that landing.
