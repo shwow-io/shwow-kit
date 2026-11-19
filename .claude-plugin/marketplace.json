@@ -1,10 +1,10 @@
 {
-  "name": "shwow-kit",
+  "name": "shwow.io",
   "owner": { "name": "fknshwow" },
   "description": "shwow-kit agent workflow plugin",
   "plugins": [
     {
-      "name": "shwow-kit",
+      "name": "shwow.io",
       "source": "./",
       "description": "A process and toolkit for building software with coding agents."
     }

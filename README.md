@@ -6,7 +6,7 @@ A process and a Claude Code plugin for building software with coding agents. The
 
 ```sh
 claude plugin marketplace add <path-or-github-repo>
-claude plugin install shwow-kit@shwow-kit
+claude plugin install shwow-kit@shwow.io
 ```
 
 ## Layout
