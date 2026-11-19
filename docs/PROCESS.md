@@ -29,8 +29,8 @@ Agents write code faster than anyone can check it, so the amount of work that ca
 | 2 | **Pin done**: turn the brief into concrete examples and failing acceptance checks; the human reviews these, not a long plan | agent, human approves | acceptance checks |
 | 3 | **Slice**: thin vertical slices in dependency order, each with its verification, the area it touches, AFK or HITL, and whether it needs running services; grouped into landings (each one PR or one push), at least one per repo | agent, human confirms | `slices/NN-*.md`, `landings.md` |
 | 4 | **Run**: one worker per slice in its own worktree, about 3 at once; test first; stop and report after two failed attempts; log deviations | agents | branch, `notes.md` |
-| 5 | **Verify**: run the slice's verification and record evidence; a fresh-context reviewer checks against the brief and acceptance checks, ignoring style; approved slices merge into their landing branch without asking | agents | evidence, review findings |
-| 6 | **Land**: check the landing as a whole, explain the diff; review depth scales with risk; open the PR, or push to the main line once the human approves | human | shipped landing |
+| 5 | **Verify**: run the slice's verification and record evidence; a fresh-context reviewer checks against the brief, the acceptance checks and the repo's written rules; approved slices merge into their landing branch without asking | agents | evidence, review findings |
+| 6 | **Land**: check the landing as a whole (its checks, a spec review, a standards review and an impact check), explain it in plain English; review depth scales with risk; open the PR, or push to the main line once the human approves | human | shipped landing |
 | 7 | **Compound**: what needed correcting, and where should the fix live? | agent proposes, human approves | updated tests, checks or skills |
 
 Human attention goes to steps 1, 2, 3 (confirming the slices and landings, which is the go-ahead to build) and 6. Between 3 and 6 agents run unattended: they build, verify, commit and merge each AFK slice into its landing branch, and stop only for a HITL decision, a blocked slice, or a landing ready to ship. Pushing to or merging into a default branch always waits for the human. Don't start new slices while three landings are waiting on the human.
@@ -49,12 +49,12 @@ A work item's home is chosen when the work starts, based on its scope:
 
 `~/.shwow-kit/work/index.md` lists every work item and its location, so any session can find and resume one. Acceptance checks that are code live in the repo; briefs, slices, notes and evidence live in the work item.
 
-Contents of a work item: `brief.md`, `slices/`, `notes.md` (deviations and decisions), `evidence/`, and for T2 a `design.md`. Durable decisions become ADRs in the affected repo when that repo keeps ADRs.
+Contents of a work item are listed in [work-items.md](work-items.md). Durable decisions become ADRs in the affected repo when that repo keeps ADRs.
 
 ## Isolation
 
-- Parallel writers get their own git worktree outside the working directory (`~/.shwow-kit/worktrees/<repo>/<slice>`), removed once merged into the landing branch. If the repo already has a worktree layout, the agent may follow it instead.
-- Read-only agents (scout, reviewer) work without a worktree.
+- Parallel writers get their own git worktree outside the working directory (`~/.shwow-kit/worktrees/<checkout>/<slice>`), removed once merged into the landing branch. If the repo already has a worktree layout, the agent may follow it instead.
+- The scout reads without a worktree. Reviewers and verify that need to run code use a temporary worktree in the same place, removed afterwards; nothing touches the user's checkout.
 - Slices that need running services (ports, databases) declare it and don't run in parallel with each other.
 - Agents work out the repo layout (plain clone, bare with worktrees, monorepo) from what they see; the kit assumes none.
 
@@ -97,8 +97,7 @@ Checked weekly: merged slices, cost per slice (from `scripts/cost.py`), median c
 | Run | `dispatch` skill, `worker` agent |
 | Verify | `verify` skill, `reviewer` agent |
 | Impact | `impact` skill, on the plan (frame) and on each landing (land) |
-| Landing sign-off | `land` skill: whole-landing checks, spec and standards reviews (`reviewer`), impact, PR from `pr-template.md` |
-| Land | `land` skill (includes explain-diff) |
+| Land | `land` skill: whole-landing checks, spec and standards reviews (`reviewer`), impact, plain-English explanation, PR from `pr-template.md` |
 | Compound | `compound` skill, with `scripts/cost.py` for each work item's cost |
 | Status and resume | `status` skill |
 | Side work | `scout` and `researcher` agents, `cleanup` skill |
