@@ -41,3 +41,12 @@ Add an index row if the work item has none, then move to the `slice` skill.
 - Write implementation code.
 - Write tests that pass before the change, or that only check mocks were called.
 - Invent behaviour the brief doesn't support; raise it as a question.
+
+## Talking to the user
+
+Start every message to the user with one of these, before anything else:
+
+- `**Needs you:**` then numbered steps, one action each, complete enough to do without reading further: what to do, the exact command and where to run it (which checkout or worktree), and what to reply when done ("say `ship`", "say `done`"). A decision is one step: the question and the options, with your recommendation.
+- `**Nothing needed from you.**` then one line on what is running and what you'll report next.
+
+Details (explanations, diffs, evidence) go below, after a blank line. Never put a request for the user only in the details, and never end with a bare "OK?".

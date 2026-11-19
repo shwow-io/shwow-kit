@@ -32,3 +32,12 @@ Show the user the brief and confirm it. Once the brief is agreed, move to the `a
 - Plan implementation, name files, functions or libraries, or write code. If a constraint seems to need one, state the observable constraint instead ("`list` output byte-identical", not "reuse `filter_tasks`").
 - Pad the brief with background the user already knows.
 - Invent requirements. If something wasn't discussed, it's a non-goal or an open question, not a feature.
+
+## Talking to the user
+
+Start every message to the user with one of these, before anything else:
+
+- `**Needs you:**` then numbered steps, one action each, complete enough to do without reading further: what to do, the exact command and where to run it (which checkout or worktree), and what to reply when done ("say `ship`", "say `done`"). A decision is one step: the question and the options, with your recommendation.
+- `**Nothing needed from you.**` then one line on what is running and what you'll report next.
+
+Details (explanations, diffs, evidence) go below, after a blank line. Never put a request for the user only in the details, and never end with a bare "OK?".

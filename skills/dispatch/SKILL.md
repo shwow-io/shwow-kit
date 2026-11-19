@@ -20,6 +20,8 @@ Work out each slice's state from the rules under State in `${CLAUDE_PLUGIN_ROOT}
 - Run two slices in parallel only if their `touches` don't overlap and at most one of them has `needs_services: true`.
 - Run at most 3 at once.
 
+Before the first worker starts, list every step the user will have to do by hand for this work (keys to add, scripts only they can run, accounts, live checks after shipping), per slice, from the slices' notes. Ask now for anything that can be done before landing, so it doesn't block later.
+
 ## Isolate
 
 Each landing has a branch (from `landings.md`), created from the repo's current main line the first time a slice of it starts. Each slice gets its own worktree and branch, created from its landing's branch, so it starts with every slice already merged there:
@@ -50,4 +52,13 @@ Invoke the `land` skill for it. Keep building other landings meanwhile. Stop sta
 
 ## Stop and report
 
-Run until no slice is ready or running. Then report once: what was merged into which landing branch, what is waiting on the user (landings to ship, HITL decisions, blocked slices with the reason), and what is left. Between start and that report, one line per change of state at most: slice, status, branch.
+Run until no slice is ready or running. Then report once, leading with what the user must do: what was merged into which landing branch, what is waiting on the user (landings to ship, HITL decisions, blocked slices with the reason), and what is left. Between start and that report, one line per change of state at most: slice, status, branch.
+
+## Talking to the user
+
+Start every message to the user with one of these, before anything else:
+
+- `**Needs you:**` then numbered steps, one action each, complete enough to do without reading further: what to do, the exact command and where to run it (which checkout or worktree), and what to reply when done ("say `ship`", "say `done`"). A decision is one step: the question and the options, with your recommendation.
+- `**Nothing needed from you.**` then one line on what is running and what you'll report next.
+
+Details (explanations, diffs, evidence) go below, after a blank line. Never put a request for the user only in the details, and never end with a bare "OK?".

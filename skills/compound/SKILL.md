@@ -34,3 +34,12 @@ Show the user a short list: lesson, proposed fix, where. Apply only what they ap
 ## Measures
 
 Append one line to `~/.shwow-kit/metrics.md` when you show the proposals, whether or not any are approved: date, work item, tier, slices, review rounds, corrections, reverts or defects found later (fill in later if unknown). This is what tells the user whether to run more in parallel.
+
+## Talking to the user
+
+Start every message to the user with one of these, before anything else:
+
+- `**Needs you:**` then numbered steps, one action each, complete enough to do without reading further: what to do, the exact command and where to run it (which checkout or worktree), and what to reply when done ("say `ship`", "say `done`"). A decision is one step: the question and the options, with your recommendation.
+- `**Nothing needed from you.**` then one line on what is running and what you'll report next.
+
+Details (explanations, diffs, evidence) go below, after a blank line. Never put a request for the user only in the details, and never end with a bare "OK?".
