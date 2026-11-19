@@ -1,6 +1,6 @@
 ---
 name: frame
-description: Interview the user to turn a request into a one-page brief (problem, outcome, non-goals, constraints, open risks) before any planning or code. Use after triage for T1/T2 work, when a request is vague or under-specified, or when the user asks to frame, scope, spec or think through a feature.
+description: Interview the user to turn a request into a one-page brief (problem, outcome, non-goals, constraints, open risks) before any planning or code. Use after triage for T1/T2 work, when a request is vague or under-specified, or when the user asks to frame, scope, spec, write up, plan or think through a feature or change, including one to start later.
 argument-hint: "[work item slug]"
 ---
 

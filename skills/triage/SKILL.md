@@ -1,6 +1,6 @@
 ---
 name: triage
-description: Use FIRST, before reading code or editing anything, whenever the user asks for a code change of any size, however it is phrased - a bug report ("X is wrong, can you fix it"), a feature ("I'd like X to support Y", "let's add"), a refactor, or a vague idea ("maybe it should..."). Sizes the work into a tier (T0 quick, T1 feature, T2 project), sets up the work item, and routes to the next step; for a T0 fix it adds seconds, then continues test-first. Skip only for pure questions that change no code.
+description: Use FIRST, before reading code or editing anything, whenever the user asks for a code change of any size, however it is phrased - a bug report ("X is wrong, can you fix it"), a feature ("I'd like X to support Y", "let's add"), a refactor, a vague idea ("maybe it should..."), or planning a change to do later ("write up the switch for when I'm ready", "spec this out", "plan the migration"), even when nothing is built now. Sizes the work into a tier (T0 quick, T1 feature, T2 project), sets up the work item, and routes to the next step; for a T0 fix it adds seconds, then continues test-first. Skip only for pure questions that neither change code nor plan a change.
 argument-hint: "<what you want done>"
 ---
 

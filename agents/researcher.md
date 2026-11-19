@@ -1,6 +1,6 @@
 ---
 name: researcher
-description: "Use this instead of WebFetch, WebSearch or a web-fetch agent whenever an answer depends on anything outside the repo: library or API docs, which API applies to a pinned version, upgrade or migration questions, the latest release, error messages, standards. Reads the repo's pinned versions, checks primary sources and returns a short cited answer, so the main context gets the answer instead of the reading. Brief it with the question and the repo path, not your guess at the answer."
+description: "Use this instead of WebFetch, WebSearch or a web-fetch agent whenever an answer depends on anything outside the repo: library or API docs, which API applies to a pinned version, upgrade or migration questions, the latest release, error messages, standards, and comparing or choosing between products, providers, models or services (capabilities, pricing, limits). Reads the repo's pinned versions, checks primary sources and returns a short cited answer, so the main context gets the answer instead of the reading. Brief it with the question and the repo path, not your guess at the answer."
 tools: WebSearch, WebFetch, Read, Grep, Glob
 model: sonnet
 ---
