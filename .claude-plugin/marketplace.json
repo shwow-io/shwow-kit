@@ -1,7 +1,7 @@
 {
-  "name": "shwow.io",
+  "name": "shwow-io",
   "owner": {
-    "name": "fknshwow"
+    "name": "shwow-io"
   },
   "description": "shwow-kit agent workflow plugin",
   "plugins": [
