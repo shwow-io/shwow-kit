@@ -30,7 +30,7 @@ Agents write code faster than anyone can check it, so the amount of work that ca
 | 3 | **Slice**: thin vertical slices in dependency order, each with its verification, the area it touches, AFK or HITL, and whether it needs running services; each sized for about 30 minutes of review | agent, human skims | `slices/NN-*.md` |
 | 4 | **Run**: one worker per slice in its own worktree, about 3 at once; test first; stop and report after two failed attempts; log deviations | agents | branch, `notes.md` |
 | 5 | **Verify**: run the slice's verification and record evidence; a fresh-context reviewer checks against the brief and acceptance checks, ignoring style | agents | evidence, review findings |
-| 6 | **Land**: the agent explains the diff and quizzes the human; review depth scales with risk; integrate the way the repo does it | human | merged change |
+| 6 | **Land**: the agent explains the diff; review depth scales with risk; integrate the way the repo does it | human | merged change |
 | 7 | **Compound**: what needed correcting, and where should the fix live? | agent proposes, human approves | updated tests, checks or skills |
 
 Human attention goes to steps 1, 2 and 6; steps 4 and 5 run in parallel. Don't start new slices while three outputs are waiting for review.
@@ -82,7 +82,7 @@ Local worktrees come first. Each slice is self-contained (brief, verification an
 
 ## Measures
 
-Checked weekly: merged slices, median change size, review minutes, corrections per slice, reverts or defects after landing, discarded sessions, and explain-diff results. Concurrency changes only when these are steady.
+Checked weekly: merged slices, median change size, review minutes, corrections per slice, reverts or defects after landing, and discarded sessions. Concurrency changes only when these are steady.
 
 ## Components
 
@@ -96,4 +96,5 @@ Checked weekly: merged slices, median change size, review minutes, corrections p
 | Verify | `verify` skill, `reviewer` agent |
 | Land | `land` skill (includes explain-diff) |
 | Compound | `compound` skill |
-| Side work | `scout` agent |
+| Status and resume | `status` skill |
+| Side work | `scout` and `researcher` agents, `cleanup` skill |

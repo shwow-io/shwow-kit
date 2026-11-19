@@ -10,7 +10,7 @@ Run slices in parallel without agents tripping over each other or the user's wor
 
 ## Pick what to run
 
-Read `slices/` in the work item. A slice is ready when its status is `todo` and everything in `depends_on` is `done`. From the ready set:
+Read `slices/` in the work item. A slice is ready when its status is `todo` and everything in `depends_on` is `done`, or when it is `running` but no worker from this session is on it (resume it in its existing worktree). From the ready set:
 
 - Run AFK slices. For HITL slices, ask the user the decision the slice names first, record it in the slice, then treat it as AFK.
 - Run two slices in parallel only if their `touches` don't overlap and at most one of them has `needs_services: true`.
@@ -20,7 +20,7 @@ Read `slices/` in the work item. A slice is ready when its status is `todo` and 
 
 Each worker gets its own worktree, outside the user's working directory:
 
-- Default: `~/.shwow-kit/worktrees/<checkout>/<slice-id>-<short-name>`, where `<checkout>` is the folder name of the user's checkout (not the slice's `repo` field, which every clone shares). Stop if the path already exists. New branch named for the work (`<type>/<short-name>` or the repo's own convention).
+- Default: `~/.shwow-kit/worktrees/<checkout>/<slice-id>-<short-name>`, where `<checkout>` is the folder name of the user's checkout (not the slice's `repo` field, which every clone shares). If the path already exists and is this slice's worktree from an earlier session (same branch, listed by `git worktree list`), reuse it; otherwise stop. New branch named for the work (`<type>/<short-name>` or the repo's own convention).
 - If the repo already uses a worktree layout (bare repo with sibling worktrees, a `worktrees/` folder), follow it instead, including how existing folders are named after their branches.
 - Branch from the repo's current main line unless the slice depends on another slice's branch.
 

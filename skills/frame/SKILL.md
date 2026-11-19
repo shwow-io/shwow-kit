@@ -11,7 +11,7 @@ Get the problem right before anyone plans or writes code. The output is a brief 
 ## Interview
 
 - One question at a time. With each question, give your recommended answer and why, so the user can reply "yes" instead of writing an essay.
-- Don't ask what the code can answer. Read it yourself, or send a `scout` subagent for broad questions, and state what you found.
+- Don't ask what the code can answer. Read it yourself, or send a `scout` subagent for broad questions, and state what you found. When an answer depends on outside facts (library behaviour at the pinned version, upgrades, standards), send the `researcher` subagent rather than answering from memory.
 - Work down the tree: purpose and who it's for → observable outcome → scope and non-goals → constraints (performance, compatibility, security, deadlines) → edge cases and failure modes. Stop a branch once it's resolved.
 - Stop when you could explain the work to a new engineer and they'd build the right thing. Usually 4 to 10 questions; fewer for small T1 work.
 

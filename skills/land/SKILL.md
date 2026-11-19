@@ -1,6 +1,6 @@
 ---
 name: land
-description: "Get a verified change merged in a way the user understands: explain the diff, quiz the user, scale review to risk, and integrate the way the repo does it (PR or direct). Use whenever the user wants a change merged or shipped, however phrased ('ship it', 'merge it', 'land this', 'open a PR', 'wrap it up'). Never merge, fast-forward or open a PR for a change without going through this skill."
+description: "Get a verified change merged in a way the user understands: explain the diff, scale review to risk, and integrate the way the repo does it (PR or direct). Use whenever the user wants a change merged or shipped, however phrased ('ship it', 'merge it', 'land this', 'open a PR', 'wrap it up'). Never merge, fast-forward or open a PR for a change without going through this skill."
 argument-hint: "[work item slug] [slice id]"
 ---
 
@@ -22,11 +22,7 @@ Explain the change to the user, using the diff as the source, even when they hav
 
 Keep it short enough to read in a few minutes.
 
-## 3. Quiz
-
-Ask the user 3 questions that someone who understood the change could answer and someone who skimmed couldn't (what happens when X fails, why is Y here, what would break if Z changed). Wait for answers, then say which were right and correct the rest. If the user answered before you asked, still state your three questions and grade their answers against them. If the user gets most wrong, offer a deeper walkthrough before continuing. The user can skip the quiz; record that in `notes.md`.
-
-## 4. Scale review to risk
+## 3. Scale review to risk
 
 - **Low risk** (small, covered by tests, easy to revert, no data or security impact): the explanation and evidence are enough.
 - **Medium:** the user reads the diff's key files.
@@ -34,7 +30,7 @@ Ask the user 3 questions that someone who understood the change could answer and
 
 Say which level applies and why.
 
-## 5. Integrate
+## 4. Integrate
 
 Follow the repo's conventions: branch protection, CONTRIBUTING, PR templates, how recent history was merged. Read `git log --first-parent -20` on the main line: merge commits from branches mean merge this branch the same way; only direct commits and no merges mean the repo works directly on main. A remote that can't host PRs (a local or bare path, no GitHub/Azure DevOps/GitLab remote) rules out a PR.
 
@@ -43,6 +39,6 @@ Follow the repo's conventions: branch protection, CONTRIBUTING, PR templates, ho
 
 A PR description states what changed, why, how it was verified (summarise the evidence) and anything the reviewer should look at. Ask the user before pushing or merging.
 
-## 6. Clean up
+## 5. Clean up
 
 After it's merged, remove the slice's worktree (and its parent folder if now empty) and local branch, set the slice to `done`, and update the work item's row in `~/.shwow-kit/work/index.md`. When every slice is done, run the `compound` skill.

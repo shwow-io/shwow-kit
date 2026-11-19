@@ -12,5 +12,5 @@ claude plugin install shwow-kit@shwow-kit
 ## Layout
 
 - `skills/`: one folder per process step (`SKILL.md` plus references and scripts)
-- `agents/`: subagent definitions (worker, reviewer, scout)
+- `agents/`: subagent definitions (worker, reviewer, scout, researcher)
 - `docs/`: the process and design notes

@@ -10,7 +10,7 @@ Pin down "done" as checks a machine can run, so agents can verify their own work
 
 ## 1. Learn how the repo verifies
 
-For each repo in the brief, find what already exists: test frameworks and how to run one test, linters, type checks, build, scripts, CI steps, documented commands, API collections, end-to-end tooling. Check the repo's AGENTS.md, CLAUDE.md, README, CI config and package or build files. Run the fastest relevant command once to confirm it works.
+For each repo in the brief, find what already exists: test frameworks and how to run one test, linters, type checks, build, scripts, CI steps, documented commands, API collections, end-to-end tooling. Check the repo's AGENTS.md, CLAUDE.md, README, CI config and package or build files. Run the fastest relevant command once to confirm it works. If an example depends on how a library or external API behaves at the pinned version, confirm it with the `researcher` subagent, not memory.
 
 Write `verification.md` in the work item: per repo, the exact commands (whole suite, single test, lint, typecheck, build) and anything that needs services running. Later steps reuse this instead of rediscovering it.
 
