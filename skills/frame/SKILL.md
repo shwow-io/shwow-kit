@@ -25,7 +25,7 @@ Write `brief.md` in the work item using `${CLAUDE_PLUGIN_ROOT}/skills/frame/brie
 
 For T2, also write `design.md`: the interfaces between repos or components, key decisions with the alternatives rejected, and risks. The user owns these decisions; propose, don't decide.
 
-Show the user the brief and confirm it. Update the work item's index row to `slicing` once the brief is agreed, then move to the `acceptance` skill.
+Show the user the brief and confirm it. Once the brief is agreed, move to the `acceptance` skill.
 
 ## Don't
 

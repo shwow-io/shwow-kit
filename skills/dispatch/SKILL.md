@@ -12,9 +12,11 @@ Build every slice the user agreed to, in parallel where safe, without asking bet
 
 Read `slices/` and `landings.md` in the work item. If `landings.md` is missing (older work items), create it now: one landing per repo, integrating the way the `land` skill's step 4 decides, and tell the user in one line.
 
-A slice is ready when its status is `todo` and everything in `depends_on` is `done`, or when it is `running` but no worker from this session is on it (resume it in its existing worktree). From the ready set:
+Older work items also have a `status:` line in each slice. Convert them once, before anything runs: for a slice at `done`, or one whose work is already on the main line (ask the user if unsure), write `evidence/<id>-merged.txt` saying so, then delete every `status:` line. Never re-run a slice the user says has shipped.
 
-- Run AFK slices. For a HITL slice, ask the user the decision the slice names, record it in the slice, then treat it as AFK. Keep other slices running while you wait.
+Work out each slice's state from the rules under State in `${CLAUDE_PLUGIN_ROOT}/docs/work-items.md`; nothing in the files says "running", so an interrupted session leaves nothing to clean up. Run the slices that are ready, and resume started ones that no worker in this session is on, in their existing worktree. Merge approved ones (below). From what's left to run:
+
+- Run AFK slices. For a HITL slice, ask the user the decision the slice names, record it in the slice as a `decision:` line, then treat it as AFK. Keep other slices running while you wait.
 - Run two slices in parallel only if their `touches` don't overlap and at most one of them has `needs_services: true`.
 - Run at most 3 at once.
 
@@ -32,19 +34,19 @@ Create worktrees yourself before starting a worker, so paths and branches are kn
 
 Start one `worker` subagent per slice, in parallel, in the background. Give each the slice file path, the work item path, its worktree path and branch, and the instruction to work only inside that worktree.
 
-Set the slice status to `running`, the landing to `building`, and the work item's row in `~/.shwow-kit/work/index.md` to `running` (add the row if missing).
+Add the work item's row to `~/.shwow-kit/work/index.md` if it's missing. Don't write any status.
 
 ## When a worker finishes
 
-- **Done with evidence:** set the slice to `review` and run the `verify` skill for it. Any fixes go back to the same worker (SendMessage) and through `verify` again, so every round gets a fresh review.
-- **Verify approves:** merge the slice branch into its landing branch in the landing's worktree, the way the repo merges (fast-forward or merge commit, per `git log --first-parent`). If it conflicts, rebase the slice branch onto the landing branch in the slice's worktree, re-run the slice's verify command, then merge. Remove the slice's worktree and branch, set the slice to `done`. Don't ask the user.
-- **Stopped (blocked, two failed attempts, or two failed review rounds):** set the slice to `blocked`, record why in `notes.md`, and tell the user. Don't restart it with the same instructions. Keep running slices that don't depend on it.
+- **Done with evidence:** run the `verify` skill for it. Any fixes go back to the same worker (SendMessage) and through `verify` again, so every round gets a fresh review.
+- **Verify approves:** merge the slice branch into its landing branch in the landing's worktree, the way the repo merges (fast-forward or merge commit, per `git log --first-parent`). If it conflicts, rebase the slice branch onto the landing branch in the slice's worktree, re-run the slice's verify command, then merge. Write `evidence/<id>-merged.txt` with the merge commit, then remove the slice's worktree (keep its branch until the landing ships). Don't ask the user.
+- **Stopped (blocked, two failed attempts, or two failed review rounds):** add a `blocked:` line with the reason to the slice file, and tell the user. Don't restart it with the same instructions. Keep running slices that don't depend on it.
 
 Then start newly ready slices, within the limits above.
 
 ## When a landing's slices are all done
 
-Set the landing to `ready` and invoke the `land` skill for it. Keep building other landings meanwhile. Stop starting new slices if three landings are waiting on the user.
+Invoke the `land` skill for it. Keep building other landings meanwhile. Stop starting new slices if three landings are waiting on the user.
 
 ## Stop and report
 

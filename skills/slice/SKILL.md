@@ -29,10 +29,10 @@ A landing is a group of slices that ships together: one PR, or one push to the m
 Write them to `landings.md` in the work item:
 
 ```
-| landing | repo | branch | slices | integrates by | status |
+| landing | repo | branch | slices | integrates by |
 ```
 
-Branch: `<type>/<work-item>` or `<type>/<work-item>-<landing>` (or the repo's convention). Status: `building`, `ready`, `waiting` (PR open, or a push awaiting the user), `shipped`. Set each slice's `landing` field to match.
+Branch: `<type>/<work-item>` or `<type>/<work-item>-<landing>` (or the repo's convention). Set each slice's `landing` field to match. Don't record a status here; see State in `${CLAUDE_PLUGIN_ROOT}/docs/work-items.md`.
 
 ## Steps
 
@@ -41,7 +41,7 @@ Branch: `<type>/<work-item>` or `<type>/<work-item>-<landing>` (or the repo's co
 3. Write one file per slice in `slices/`, named `NN-<short-name>.md`, using `${CLAUDE_PLUGIN_ROOT}/skills/slice/slice-template.md`. Number in dependency order, starting at 01. No other files in `slices/`.
 4. Group the slices into landings and write `landings.md`.
 5. Check coverage: every acceptance example is covered by at least one slice; every slice traces back to the brief. Flag anything that doesn't.
-6. Show the user a short table: slice, mode, depends on, parallel-safe, landing. Ask them to confirm, reorder, merge or regroup. Their confirmation is the go-ahead for agents to build, commit and merge every AFK slice into its landing branch without asking again. Then set the index row to `running`, adding the row if the work item has none, and invoke `dispatch`.
+6. Show the user a short table: slice, mode, depends on, parallel-safe, landing. Ask them to confirm, reorder, merge or regroup. Their confirmation is the go-ahead for agents to build, commit and merge every AFK slice into its landing branch without asking again. Add the index row if the work item has none, then invoke `dispatch`.
 
 ## Don't
 

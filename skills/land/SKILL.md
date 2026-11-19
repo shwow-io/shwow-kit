@@ -12,7 +12,7 @@ The unit is a landing from the work item's `landings.md`: its slices are already
 
 ## 1. Check it's ready
 
-Every slice in the landing is `done`, with evidence (`evidence/<slice-id>-checks.txt`) and an approving review (`evidence/<slice-id>-review.md`). Run any missing step first (`dispatch` or `verify`).
+Every slice in the landing is done (State in `${CLAUDE_PLUGIN_ROOT}/docs/work-items.md`), with evidence (`evidence/<slice-id>-checks.txt`) and an approving review (`evidence/<slice-id>-review.md`). Run any missing step first (`dispatch` or `verify`).
 
 Then check the landing as a whole, in its worktree: rebase or merge the current main line in if it has moved, and run every slice's verify command plus the repo's fast checks. Save the output to `evidence/<landing>-checks.txt`. A failure here goes back to `dispatch` as a fix slice, not to the user.
 
@@ -39,11 +39,11 @@ Say which level applies and why.
 
 Use the method in `landings.md`. If it isn't set, decide from the repo's conventions: branch protection, CONTRIBUTING, PR templates, and `git log --first-parent -20` on the main line. Merge commits from branches mean merge this branch the same way; only direct commits and no merges mean the repo works directly on main. A remote that can't host PRs (a local or bare path, no GitHub/Azure DevOps/GitLab remote) rules out a PR. With mixed history and a PR-capable remote, use a PR.
 
-- **PR:** push the landing branch and open the PR without asking; it changes nothing on the main line. The description states what changed, why, how it was verified (summarise the evidence) and anything the reviewer should look at. Set the landing to `waiting` and give the user the link. The user merges, or tells you to.
-- **Direct to the main line:** only when the repo clearly works that way and the change is low risk and easy to revert. Set the landing to `waiting`, show the explanation, and ask the user to approve the push. Push only after they say so.
+- **PR:** push the landing branch and open the PR without asking; it changes nothing on the main line. The description states what changed, why, how it was verified (summarise the evidence) and anything the reviewer should look at. Give the user the link. The user merges, or tells you to.
+- **Direct to the main line:** only when the repo clearly works that way and the change is low risk and easy to revert. Show the explanation and ask the user to approve the push. Push only after they say so.
 
 Pushing to or merging into the default branch always needs the user's approval of that landing.
 
 ## 5. Clean up
 
-Once it's merged or pushed: remove the landing's worktree (and its parent folder if now empty) and local branch, set the landing to `shipped`, and update the work item's row in `~/.shwow-kit/work/index.md` (`landing` while any landing is `waiting`). If later landings were built on this branch, rebase them onto the main line. When every landing is shipped, run the `compound` skill.
+Once it's merged or pushed: write `evidence/<landing>-shipped.txt` (the commit on the main line, or the PR's URL), then remove the landing's worktree (and its parent folder if now empty) and its local branch, and the slice branches merged into it. If later landings were built on this branch, rebase them onto the main line. When every landing is shipped, run the `compound` skill.

@@ -29,7 +29,7 @@ For T0 work, a reviewer is optional when the change is tiny and fully covered by
 ## 3. Decide
 
 - **Checks pass and review approves:** the slice is ready to merge into its landing branch. Under `dispatch`, return to it; it merges without asking the user. Run on its own (no work item, or a T0 fix), hand over to the `land` skill.
-- **Anything blocking:** list it, set the slice back to `running`, and send the findings to the worker (or the user for HITL). The fix comes back through this skill with a fresh reviewer every round; don't approve a fix yourself. A slice still failing after its second fix round is `blocked`: stop and ask the user.
+- **Anything blocking:** list it and send the findings to the worker (or the user for HITL). The fix comes back through this skill with a fresh reviewer every round; don't approve a fix yourself. A slice still failing after its second fix round is blocked: add a `blocked:` line with the reason to the slice file, and ask the user.
 
 ## Report
 

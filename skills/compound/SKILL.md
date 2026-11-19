@@ -29,7 +29,7 @@ Don't add instructions that restate what the code or README already makes clear,
 
 ## 4. Propose, then apply
 
-Show the user a short list: lesson, proposed fix, where. Apply only what they approve. Record the outcome in `notes.md`, set the work item to `done` in `~/.shwow-kit/work/index.md`.
+Show the user a short list: lesson, proposed fix, where. Apply only what they approve. Record the outcome in `notes.md`, set the work item's `closed` to `done` in `~/.shwow-kit/work/index.md`.
 
 ## Measures
 
