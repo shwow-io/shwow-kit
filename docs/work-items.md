@@ -34,7 +34,7 @@ Add the row when the work item is created. `closed` is empty while the work is o
   evidence/         command output, screenshots, review findings
 ```
 
-Slug: short kebab-case description, e.g. `export-invoices-csv`.
+Slug: short kebab-case description, e.g. `export-invoices-csv`. When the work already has a ticket or work item id in the conversation (the user gave one, or it's in the branch name or the issue being worked on), prefix it: `546-stripe-upgrade`, `PROJ-123-export-invoices-csv`. Use the id as the tracker writes it, lowercased only if it has letters and the repo's branches do so. Don't go looking for an id, or create one, just to name the folder.
 
 Executable acceptance checks are code and live in the repo with the change. Everything else stays in the work item.
 
