@@ -32,7 +32,7 @@ When torn between two tiers, pick the lower and say what would bump it up.
 3. Verify (the `verify` skill's rules apply: evidence, not claims).
 4. Land it the way the repo does it.
 
-**T1 / T2:** read `~/.shwow-kit/work/index.md` first. If a row looks like the same work and its location is in this repo, offer to resume it; ignore rows for other checkouts. Never write into a slug folder that already exists. Then create the work item following `${CLAUDE_PLUGIN_ROOT}/docs/work-items.md` (location rules, index row, folder). Print two or three lines (tier and why, work item path, framing is next) before starting the `frame` skill, unless the user wants to stop there.
+**T1 / T2:** read `~/.shwow-kit/work/index.md` first. If a row looks like the same work and its `repos` include this repo, offer to resume it. Never write into a slug folder that already exists. Then create the work item following `${CLAUDE_PLUGIN_ROOT}/docs/work-items.md` (in `~/.shwow-kit/work/<slug>/`, index row). Print two or three lines (tier and why, work item path, framing is next) before starting the `frame` skill, unless the user wants to stop there.
 
 ## Output
 

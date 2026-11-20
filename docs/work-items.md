@@ -4,13 +4,9 @@ Every piece of T1/T2 work has a folder. T0 work has none.
 
 ## Location
 
-Decide once, when the work item is created:
+Every work item lives in `~/.shwow-kit/work/<slug>/`, whether it touches one repo or several, next to the worktrees in `~/.shwow-kit/worktrees/`. Nothing about the work goes into a repo except the code and tests the work changes: a work folder in the repo would sit as uncommitted files on the user's branch, and agents would have to decide whether to commit it.
 
-1. Work confined to one repo, and that repo (or the `.claude` config of the current directory) already has a work folder: use it. Recognised names: `.work/`, `.scratch/`, `work/`, or a path named under a "Work items" heading in the repo's AGENTS.md or CLAUDE.md.
-2. Anything else, including all multi-repo work: `~/.shwow-kit/work/<slug>/`.
-3. The user can override either.
-
-Never create a work folder inside a repo that doesn't already have one.
+Work items created by earlier versions inside a repo (`.scratch/`, `.work/`) keep working where they are; their index row says where. Move one to `~/.shwow-kit/work/` only when the user asks, and never while a session is running it.
 
 ## Index
 
@@ -22,7 +18,7 @@ Never create a work folder inside a repo that doesn't already have one.
 
 Add the row when the work item is created. `closed` is empty while the work is open, `done` once `compound` finishes it, or `parked` when the user sets it aside; those are the only edits a row gets. Everything else about the work's state is worked out from the files and git (see State).
 
-`location` is an absolute path in the OS's native form; for repo-local items it includes the repo root, so rows from different checkouts don't collide. Pick a slug whose folder doesn't exist yet; never overwrite an existing work item.
+`location` is the work item's absolute path in the OS's native form; `repos` names the repos it touches (folder names of the checkouts), so a session can find the work for the repo it's in. Pick a slug whose folder doesn't exist yet; never overwrite an existing work item.
 
 ## Contents
 

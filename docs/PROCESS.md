@@ -41,11 +41,7 @@ Human attention goes to steps 1, 2, 3 (confirming the slices and landings, which
 
 ## Where work lives
 
-A work item's home is chosen when the work starts, based on its scope:
-
-1. If the work stays in one repo and that repo (or the current directory's `.claude` config) already has a work folder, use it.
-2. Otherwise, including all multi-repo work, use `~/.shwow-kit/work/<item>/`.
-3. The human can always override.
+Every work item lives in `~/.shwow-kit/work/<item>/`, outside every repo, next to the worktrees. A repo only ever receives the code and tests the work changes, so the user's checkout never carries uncommitted work files.
 
 `~/.shwow-kit/work/index.md` lists every work item and its location, so any session can find and resume one. Acceptance checks that are code live in the repo; briefs, slices, notes and evidence live in the work item.
 
