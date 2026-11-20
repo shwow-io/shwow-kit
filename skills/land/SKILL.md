@@ -46,7 +46,7 @@ Say which level applies and why.
 
 Use the method in `landings.md`. If it isn't set, decide from the repo's conventions: branch protection, CONTRIBUTING, PR templates, and `git log --first-parent -20` on the main line. Merge commits from branches mean merge this branch the same way; only direct commits and no merges mean the repo works directly on main. A remote that can't host PRs (a local or bare path, no GitHub/Azure DevOps/GitLab remote) rules out a PR. With mixed history and a PR-capable remote, use a PR.
 
-- **PR:** push the landing branch and open the PR without asking; it changes nothing on the main line. Write the description from `${CLAUDE_PLUGIN_ROOT}/skills/land/pr-template.md`, filled from the evidence, the impact report and `landings.md`. Give the user the link. The user merges, or tells you to.
+- **PR:** push the landing branch and open the PR without asking; it changes nothing on the main line. Write the description with the `pr` skill, which reads the evidence, the impact report and `landings.md` from the work item. Give the user the link. The user merges, or tells you to.
 - **Direct to the main line:** only when the repo clearly works that way and the change is low risk and easy to revert. Show the explanation and ask the user to approve the push. Push only after they say so.
 
 Pushing to or merging into the default branch always needs the user's approval of that landing.

@@ -97,7 +97,7 @@ Checked weekly: merged slices, cost per slice (from `scripts/cost.py`), median c
 | Run | `dispatch` skill, `worker` agent |
 | Verify | `verify` skill, `reviewer` agent |
 | Impact | `impact` skill, on the plan (frame) and on each landing (land) |
-| Land | `land` skill: whole-landing checks, spec and standards reviews (`reviewer`), impact, plain-English explanation, PR from `pr-template.md` |
+| Land | `land` skill: whole-landing checks, spec and standards reviews (`reviewer`), impact, plain-English explanation, PR description from the `pr` skill |
 | Compound | `compound` skill, with `scripts/cost.py` for each work item's cost |
 | Status and resume | `status` skill |
 | Side work | `scout` and `researcher` agents, `cleanup` skill |

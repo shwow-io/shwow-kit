@@ -1,4 +1,4 @@
-# PR description
+# PR description template
 
 Write for a reviewer who knows the product but not this code. The first two sections are plain English: no class, method, file or field names, no library internals. Someone should understand the problem and the fix from them alone, without reading further. Technical detail comes after, for those who want it.
 
@@ -17,7 +17,7 @@ Some hosts cap the length (Azure DevOps: 4,000 characters). Over it, cut from Te
 
 **Can be undone:** <yes, by reverting | partly: what stays behind | no: what can't be undone>
 **If it's wrong:** <what breaks and for whom, in plain words>
-**Breaking for others:** <no | yes, what and for whom> (from the impact report)
+**Breaking for others:** <no | yes, what and for whom>
 
 ## Technical changes
 
@@ -27,7 +27,7 @@ Some hosts cap the length (Azure DevOps: 4,000 characters). Over it, cut from Te
 
 - Before: <the failing test or check, the wrong output>
 - After: <the same run passing>
-- <other checks run on the whole landing, with results>
+- <other checks run, with results>
 
 ## Shipping
 
