@@ -35,7 +35,7 @@ Agents write code faster than anyone can check it, so the amount of work that ca
 
 Human attention goes to steps 1, 2, 3 (confirming the slices and landings, which is the go-ahead to build) and 6. Between 3 and 6 agents run unattended: they build, verify, commit and merge each AFK slice into its landing branch, and stop only for a HITL decision, a blocked slice, or a landing ready to ship. Pushing to or merging into a default branch always waits for the human. Don't start new slices while three landings are waiting on the human.
 
-**Talking to the human:** every message starts with what the human must do, as numbered steps with exact commands and where to run them, or with "Nothing needed from you" and what is running. Explanations come after. A request is never buried in the details. While something is still waiting on the human, each later message repeats the full request, not a summary.
+**Talking to the human:** every message starts with what the human must do, as numbered steps with exact commands and where to run them, or with "Nothing needed from you" and what is running. Explanations come after. A request is never buried in the details. While something is still waiting on the human, each later message about that work repeats the full request, not a summary. A question about other work is answered first; other pending requests get one line at the end.
 
 **AFK / HITL:** AFK slices are well specified and verifiable, so an agent can run them alone. HITL slices need a human decision partway through.
 
