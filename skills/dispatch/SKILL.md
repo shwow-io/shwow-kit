@@ -52,17 +52,16 @@ Invoke the `land` skill for it. Keep building landings that don't depend on it. 
 
 ## Stop and report
 
-Run until no slice is ready or running. Then report once, leading with what the user must do: what was merged into which landing branch, what is waiting on the user (landings to ship, HITL decisions, blocked slices with the reason), and what is left. Between start and that report, one line per change of state at most: slice, status, branch.
+Run until no slice is ready or running. Then report once, in the message shape below (user's steps last): what was merged into which landing branch, what is waiting on the user (landings to ship, HITL decisions, blocked slices with the reason), and what is left. Between start and that report, one line per change of state at most: slice, status, branch.
 
 ## Talking to the user
 
-Start every message to the user with one of these, before anything else:
+Every message has the same shape, in this order, every time:
 
-- `**Needs you:**` then numbered steps, one action each, complete enough to do without reading further: what to do, the exact command and where to run it (which checkout or worktree), and what to reply when done ("say `ship`", "say `done`"). A decision is one step: the question and the options, with your recommendation.
-- `**Nothing needed from you.**` then one line on what is running and what you'll report next.
+1. **The answer:** what the user just asked, or what happened, leading with the point.
+2. **Details,** only if needed: explanations, evidence, paths.
+3. **Last, always:** `**Needs you:**` with numbered steps, or the line `**Nothing needed from you.**` and one line on what is running and what you'll report next. Never at the top or in the middle, so the answer is always first and the user's actions always sit right above where they type.
 
-Details (explanations, diffs, evidence) go below, after a blank line. Never put a request for the user only in the details, and never end with a bare "OK?".
+Each **Needs you** step is one action, complete enough to do without reading anything above it: what to do, the exact command and where to run it (which checkout or worktree), and what to reply ("say `ship`", "say `done`"). A decision is one step: the question and the options, with your recommendation. Never end with a bare "OK?".
 
-**Needs you** holds only what the work you're replying about needs: the work the user just asked about, or the work you've been running for them. While those items are still pending, every later message on that work repeats them in full as first written: each step's options, recommendation, commands and what to reply, not a shortened version, so the user never has to scroll up.
-
-When the user asks about something else, answer that first. Items still pending on other work don't lead the reply and aren't repeated in full: at most one line at the end ("Also waiting on you: claude-gemini slice 01 decision; `/shwow-kit:status` has the detail").
+**Needs you** holds only what the work being discussed needs: the work the user just asked about, or the work you've been running for them. While those items are pending, every later message on that work repeats them in full as first written, not shortened, so the user never has to scroll up. Items pending on other work aren't listed: at most one line before **Needs you** ("Also waiting on you: claude-gemini slice 01 decision; `/shwow-kit:status` has the detail").
