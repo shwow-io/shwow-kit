@@ -14,7 +14,7 @@ In the change's worktree. If it has none, create a temporary one at `~/.shwow-ki
 
 1. **Existing checks** that cover the change: the slice's verify command, related tests, lint, typecheck, build. Take commands from the work item's `verification.md`; if there isn't one, discover them (AGENTS.md, CLAUDE.md, README, CI config, build files) and record what you found in `verification.md`.
 2. **A new check** if nothing existing covers the change: a test, a script, or a command with expected output. Add it to the repo if it belongs there.
-3. **Exercise it for real** where tests can't reach: run the app, call the endpoint, drive the UI, dry-run the deployment. Capture the output or screenshot.
+3. **Exercise it for real** where tests can't reach: run the app, call the endpoint, drive the UI (native desktop UI with a computer-use skill when one is available), dry-run the deployment. Capture the output or screenshot.
 
 If nothing executable fits (docs, prose, some config), step 2 below is the verification.
 
