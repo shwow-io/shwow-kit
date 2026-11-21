@@ -99,8 +99,15 @@ def snapshot(run):
     return {p: p.stat().st_mtime_ns for p in run.rglob("*") if p.is_file() and META not in p.relative_to(run).parts}
 
 
-def tail(path):
-    return path.read_text(encoding="utf-8", errors="replace").splitlines()[-TAIL:]
+def size(path):
+    return path.stat().st_size if path.exists() else 0
+
+
+def tail(path, start):
+    """Return the last TAIL lines written to path after byte offset start."""
+    with open(path, "rb") as f:
+        f.seek(start)
+        return f.read().decode("utf-8", errors="replace").splitlines()[-TAIL:]
 
 
 def read_events(stdout, events, meta, resumed):
@@ -156,6 +163,7 @@ def main():
         cmd.append(resumed)
     cmd.append("-")
     session, code, reason = None, None, None
+    logs = {name: size(meta / name) for name in ("events.jsonl", "stderr.txt")}
     with open(meta / "events.jsonl", "a", encoding="utf-8") as events, \
          open(meta / "stderr.txt", "a", encoding="utf-8") as err:
         try:
@@ -191,7 +199,7 @@ def main():
         failed = f"Codex failed with exit code {code}" if code else "Codex failed"
         if reason:
             failed += f": {reason}"
-        tails = {name: tail(meta / name) for name in ("events.jsonl", "stderr.txt")}
+        tails = {name: tail(meta / name, start) for name, start in logs.items()}
         print(f"{failed}. Run folder kept." + (" Last output:" if any(tails.values()) else " No output from Codex."))
         for name, lines in tails.items():
             if lines:
