@@ -11,15 +11,17 @@ Codex runs the task in a fresh folder of its own, never in a repo checkout. Anyt
 ## Run
 
 1. Write the prompt as a complete task: what to make, sizes, formats, and file names if they matter. Codex sees nothing of this conversation.
-2. Run it (it takes a minute or more; images about a minute):
+2. Run it. A run takes a minute or more and can pass the Bash tool's 2-minute default, so set the timeout to 600000 ms or run it in the background:
 
    ```
    python ${CLAUDE_PLUGIN_ROOT}/skills/ask-codex/ask_codex.py "<prompt>"
    ```
 
-   For a long prompt, pipe it on stdin instead of passing an argument.
-3. The script prints the run folder, the Codex session id, the files Codex wrote, and Codex's last message. View any image before describing it.
-4. Report Codex's last message and the paths of the files it wrote. If the user wants a file in the repo, copy it there; don't point the repo at the run folder.
+   For a long prompt, pipe it on stdin instead of passing an argument. Add `-m <model>` only if the user names a Codex model.
+3. If the script prints one line saying Codex isn't installed or isn't logged in, pass that line to the user and stop. Nothing was run and no folder was made.
+4. If Codex fails, the script prints its exit code and last output lines, and keeps the run folder. Report the exit code and the error; don't retry blindly.
+5. Otherwise the script prints the run folder, the Codex session id, the files Codex wrote, and Codex's last message. View any image before describing it.
+6. Report Codex's last message and the paths of the files it wrote. If the user wants a file in the repo, copy it there; don't point the repo at the run folder.
 
 ## Run folder layout
 

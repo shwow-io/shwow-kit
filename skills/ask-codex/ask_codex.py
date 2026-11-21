@@ -1,6 +1,6 @@
 """Run a task in Codex inside its own run folder and print the result.
 
-Usage: python ask_codex.py "<prompt>"    (or pipe the prompt on stdin)
+Usage: python ask_codex.py [-m MODEL] "<prompt>"    (or pipe the prompt on stdin)
 
 Each run gets a new folder under ~/.shwow-kit/codex/<run>/, which is Codex's working
 directory. Bookkeeping lives in <run>/.ask-codex/ (see SKILL.md for the layout).
@@ -18,11 +18,23 @@ import sys
 
 ROOT = pathlib.Path.home() / ".shwow-kit" / "codex"
 META = ".ask-codex"
-SUFFIX = "\n\nWork only in the current directory and save any files you create there."
+SUFFIX = "\n\nSave the files you produce in the current directory."
+TAIL = 10
 
 
 def now():
     return datetime.datetime.now(datetime.timezone.utc)
+
+
+def preflight():
+    """Return the codex executable, or exit with one line saying what's wrong."""
+    codex = shutil.which("codex")
+    if not codex:
+        sys.exit("Codex isn't installed: `codex` is not on PATH.")
+    status = subprocess.run([codex, "login", "status"], capture_output=True)
+    if status.returncode:
+        sys.exit("Codex isn't logged in: run `codex login`.")
+    return codex
 
 
 def new_run_folder():
@@ -40,25 +52,34 @@ def snapshot(run):
     return {p: p.stat().st_mtime_ns for p in run.rglob("*") if p.is_file() and META not in p.relative_to(run).parts}
 
 
+def tail(path):
+    return path.read_text(encoding="utf-8", errors="replace").splitlines()[-TAIL:]
+
+
 def main():
     ap = argparse.ArgumentParser(description="Run a task in Codex in a fresh folder under ~/.shwow-kit/codex/.")
     ap.add_argument("prompt", nargs="?", help="the task for Codex; read from stdin if omitted")
+    ap.add_argument("-m", "--model", help="Codex model to use instead of its default")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stdin.reconfigure(encoding="utf-8")
 
     prompt = args.prompt if args.prompt is not None else sys.stdin.read()
     if not prompt.strip():
         ap.error("no prompt given")
 
-    codex = shutil.which("codex")
+    codex = preflight()
     run = new_run_folder()
     meta = run / META
     touch_last_used(meta)
     before = snapshot(run)
 
-    # --approve-for-me runs commands in the workspace-write sandbox, so writes stay in cwd.
-    cmd = [codex, "exec", "--skip-git-repo-check", "--approve-for-me", "--json",
-           "-o", str(meta / "last-message.txt"), "-"]
+    # The workspace-write sandbox blocks writes outside the run folder; exec never prompts for approval.
+    cmd = [codex, "exec", "--skip-git-repo-check", "-s", "workspace-write", "--json",
+           "-o", str(meta / "last-message.txt")]
+    if args.model:
+        cmd += ["-m", args.model]
+    cmd.append("-")
     with open(meta / "events.jsonl", "w", encoding="utf-8") as events, \
          open(meta / "stderr.txt", "w", encoding="utf-8") as err:
         proc = subprocess.Popen(cmd, cwd=run, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err,
@@ -92,7 +113,13 @@ def main():
     print("Last message:")
     print(last or "(none)")
     if code:
-        print(f"Codex exited with code {code}.")
+        print(f"Codex failed with exit code {code}. Run folder kept. Last output:")
+        for name in ("events.jsonl", "stderr.txt"):
+            lines = tail(meta / name)
+            if lines:
+                print(f"  {name}:")
+                for line in lines:
+                    print(f"    {line}")
     return code
 
 
