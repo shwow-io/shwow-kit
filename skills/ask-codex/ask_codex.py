@@ -153,8 +153,8 @@ def main():
                 except json.JSONDecodeError:
                     continue
                 if e.get("type") == "thread.started":
-                    session = e.get("thread_id")
-                    if session != resumed:
+                    session = e.get("thread_id") or ""
+                    if session and session != resumed:
                         (meta / "session-id").write_text(session + "\n", encoding="utf-8")
         code = proc.wait()
 
@@ -164,7 +164,10 @@ def main():
     last = last_file.read_text(encoding="utf-8").strip() if last_file.exists() else ""
 
     print(f"Run folder: {run}")
-    print(f"Session id: {session or '(none)'}")
+    if session == "":
+        print("Session id: (none: Codex started a session but didn't report its id)")
+    else:
+        print(f"Session id: {session or '(none)'}")
     print("Files written:" + ("" if written else " none"))
     for p in written:
         print(f"  {p}")
