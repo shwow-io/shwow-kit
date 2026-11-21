@@ -103,6 +103,23 @@ def tail(path):
     return path.read_text(encoding="utf-8", errors="replace").splitlines()[-TAIL:]
 
 
+def read_events(stdout, events, meta, resumed):
+    """Copy Codex's JSON events to events.jsonl and return the session id ("" if Codex reported none)."""
+    session = None
+    for line in stdout:
+        events.write(line)
+        if session is None:
+            try:
+                e = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if e.get("type") == "thread.started":
+                session = e.get("thread_id") or ""
+                if session and session != resumed:
+                    (meta / "session-id").write_text(session + "\n", encoding="utf-8")
+    return session
+
+
 def main():
     ap = argparse.ArgumentParser(description="Run a task in Codex in a fresh folder under ~/.shwow-kit/codex/.")
     ap.add_argument("prompt", nargs="?", help="the task for Codex; read from stdin if omitted")
@@ -138,25 +155,22 @@ def main():
     if resumed:
         cmd.append(resumed)
     cmd.append("-")
+    session, code, reason = None, None, None
     with open(meta / "events.jsonl", "a", encoding="utf-8") as events, \
          open(meta / "stderr.txt", "a", encoding="utf-8") as err:
-        proc = subprocess.Popen(cmd, cwd=run, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err,
-                                text=True, encoding="utf-8", errors="replace")
-        proc.stdin.write(prompt + SUFFIX)
-        proc.stdin.close()
-        session = None
-        for line in proc.stdout:
-            events.write(line)
-            if session is None:
-                try:
-                    e = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                if e.get("type") == "thread.started":
-                    session = e.get("thread_id") or ""
-                    if session and session != resumed:
-                        (meta / "session-id").write_text(session + "\n", encoding="utf-8")
-        code = proc.wait()
+        try:
+            proc = subprocess.Popen(cmd, cwd=run, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err,
+                                    text=True, encoding="utf-8", errors="replace")
+        except OSError as e:
+            reason = f"couldn't start ({e.__class__.__name__}: {e})"
+        else:
+            try:
+                proc.stdin.write(prompt + SUFFIX)
+                proc.stdin.close()
+            except OSError:
+                reason = "it closed its input before reading the whole prompt"
+            session = read_events(proc.stdout, events, meta, resumed)
+            code = proc.wait()
 
     touch_last_used(meta)
     after = snapshot(run)
@@ -173,15 +187,18 @@ def main():
         print(f"  {p}")
     print("Last message:")
     print(last or "(none)")
-    if code:
-        print(f"Codex failed with exit code {code}. Run folder kept. Last output:")
-        for name in ("events.jsonl", "stderr.txt"):
-            lines = tail(meta / name)
+    if code or reason:
+        failed = f"Codex failed with exit code {code}" if code else "Codex failed"
+        if reason:
+            failed += f": {reason}"
+        tails = {name: tail(meta / name) for name in ("events.jsonl", "stderr.txt")}
+        print(f"{failed}. Run folder kept." + (" Last output:" if any(tails.values()) else " No output from Codex."))
+        for name, lines in tails.items():
             if lines:
                 print(f"  {name}:")
                 for line in lines:
                     print(f"    {line}")
-    return code
+    return code or (1 if reason else 0)
 
 
 if __name__ == "__main__":
