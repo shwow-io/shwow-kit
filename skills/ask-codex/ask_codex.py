@@ -1,9 +1,11 @@
 """Run a task in Codex inside its own run folder and print the result.
 
-Usage: python ask_codex.py [-m MODEL] "<prompt>"    (or pipe the prompt on stdin)
+Usage: python ask_codex.py [-m MODEL] [--follow-up RUN] "<prompt>"    (or pipe the prompt on stdin)
 
 Each run gets a new folder under ~/.shwow-kit/codex/<run>/, which is Codex's working
 directory. Bookkeeping lives in <run>/.ask-codex/ (see SKILL.md for the layout).
+--follow-up resumes an earlier run's Codex session in that run's folder instead.
+Before running, deletes ask-codex run folders last used more than 30 days ago.
 Prints the run folder, the Codex session id, Codex's last message and the files it wrote.
 """
 
@@ -20,6 +22,7 @@ ROOT = pathlib.Path.home() / ".shwow-kit" / "codex"
 META = ".ask-codex"
 SUFFIX = "\n\nSave the files you produce in the current directory."
 TAIL = 10
+MAX_IDLE = datetime.timedelta(days=30)
 
 
 def now():
@@ -31,10 +34,49 @@ def preflight():
     codex = shutil.which("codex")
     if not codex:
         sys.exit("Codex isn't installed: `codex` is not on PATH.")
-    status = subprocess.run([codex, "login", "status"], capture_output=True)
+    try:
+        status = subprocess.run([codex, "login", "status"], capture_output=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        sys.exit(f"Couldn't check the Codex login: `codex login status` failed ({e.__class__.__name__}).")
     if status.returncode:
         sys.exit("Codex isn't logged in: run `codex login`.")
     return codex
+
+
+def last_used(run):
+    try:
+        used = datetime.datetime.fromisoformat((run / META / "last-used").read_text(encoding="utf-8").strip())
+    except (OSError, ValueError):
+        return None
+    return used if used.tzinfo else used.replace(tzinfo=datetime.timezone.utc)
+
+
+def sweep(keep=None):
+    """Delete ask-codex run folders last used more than MAX_IDLE ago. Anything without the marker is left alone."""
+    if not ROOT.is_dir():
+        return
+    cutoff = now() - MAX_IDLE
+    for run in ROOT.iterdir():
+        if run == keep or not (run / META).is_dir():
+            continue
+        used = last_used(run)
+        if used is not None and used < cutoff:
+            try:
+                shutil.rmtree(run)
+            except OSError as e:
+                print(f"Couldn't delete idle run folder {run}: {e}", file=sys.stderr)
+
+
+def follow_up_folder(name):
+    """Return the run folder and session id to resume, or exit with one line saying what's wrong."""
+    run = ROOT / pathlib.Path(name).name
+    try:
+        session = (run / META / "session-id").read_text(encoding="utf-8").strip()
+    except OSError:
+        session = ""
+    if not session:
+        sys.exit(f"No ask-codex run with a session id at {run}.")
+    return run, session
 
 
 def new_run_folder():
@@ -60,6 +102,7 @@ def main():
     ap = argparse.ArgumentParser(description="Run a task in Codex in a fresh folder under ~/.shwow-kit/codex/.")
     ap.add_argument("prompt", nargs="?", help="the task for Codex; read from stdin if omitted")
     ap.add_argument("-m", "--model", help="Codex model to use instead of its default")
+    ap.add_argument("--follow-up", metavar="RUN", help="resume the Codex session of this earlier run (folder name or path)")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stdin.reconfigure(encoding="utf-8")
@@ -69,19 +112,27 @@ def main():
         ap.error("no prompt given")
 
     codex = preflight()
-    run = new_run_folder()
+    run, resumed = follow_up_folder(args.follow_up) if args.follow_up else (None, None)
+    sweep(keep=run)
+    if run is None:
+        run = new_run_folder()
     meta = run / META
     touch_last_used(meta)
     before = snapshot(run)
 
     # The workspace-write sandbox blocks writes outside the run folder; exec never prompts for approval.
-    cmd = [codex, "exec", "--skip-git-repo-check", "-s", "workspace-write", "--json",
-           "-o", str(meta / "last-message.txt")]
+    # `resume` rejects -s, so it goes before the subcommand.
+    cmd = [codex, "exec", "-s", "workspace-write"]
+    if resumed:
+        cmd.append("resume")
+    cmd += ["--skip-git-repo-check", "--json", "-o", str(meta / "last-message.txt")]
     if args.model:
         cmd += ["-m", args.model]
+    if resumed:
+        cmd.append(resumed)
     cmd.append("-")
-    with open(meta / "events.jsonl", "w", encoding="utf-8") as events, \
-         open(meta / "stderr.txt", "w", encoding="utf-8") as err:
+    with open(meta / "events.jsonl", "a", encoding="utf-8") as events, \
+         open(meta / "stderr.txt", "a", encoding="utf-8") as err:
         proc = subprocess.Popen(cmd, cwd=run, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=err,
                                 text=True, encoding="utf-8", errors="replace")
         proc.stdin.write(prompt + SUFFIX)
@@ -96,7 +147,8 @@ def main():
                     continue
                 if e.get("type") == "thread.started":
                     session = e.get("thread_id")
-                    (meta / "session-id").write_text(session + "\n", encoding="utf-8")
+                    if session != resumed:
+                        (meta / "session-id").write_text(session + "\n", encoding="utf-8")
         code = proc.wait()
 
     touch_last_used(meta)

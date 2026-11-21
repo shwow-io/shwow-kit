@@ -23,12 +23,26 @@ Codex runs the task in a fresh folder of its own, never in a repo checkout. Anyt
 5. Otherwise the script prints the run folder, the Codex session id, the files Codex wrote, and Codex's last message. View any image before describing it.
 6. Report Codex's last message and the paths of the files it wrote. If the user wants a file in the repo, copy it there; don't point the repo at the run folder.
 
+## Follow-ups
+
+To change an earlier run's result ("make the eyes bigger"), resume that run instead of starting a new one. Codex continues the same session in the same folder, so it already knows the earlier task and files:
+
+```
+python ${CLAUDE_PLUGIN_ROOT}/skills/ask-codex/ask_codex.py --follow-up <run> "<prompt>"
+```
+
+`<run>` is the run folder's name or path from the earlier output. The output and failure handling are the same as a new run.
+
+## Cleanup
+
+Every run first deletes ask-codex run folders last used more than 30 days ago. A follow-up counts as use. Anything under `~/.shwow-kit/codex/` without the `.ask-codex/` marker is never touched.
+
 ## Run folder layout
 
 Each run is `~/.shwow-kit/codex/<run>/`, where `<run>` is `YYYYMMDD-HHMMSS-<4 hex>` (UTC). Codex's working directory is the run folder, and its output lands there. Bookkeeping lives in `<run>/.ask-codex/`:
 
 - The `.ask-codex/` folder itself marks the run folder as created by ask-codex. Anything under `~/.shwow-kit/codex/` without it was not.
 - `session-id`: the Codex session (thread) id, one line.
-- `last-used`: the UTC time the run was last used, one ISO 8601 line. Rewritten at the start and end of every run.
-- `last-message.txt`: Codex's last message.
-- `events.jsonl`, `stderr.txt`: Codex's raw output, for diagnosing a failed run.
+- `last-used`: the UTC time the run was last used, one ISO 8601 line. Rewritten at the start and end of every run and follow-up. Cleanup reads this.
+- `last-message.txt`: Codex's last message, from the latest run or follow-up.
+- `events.jsonl`, `stderr.txt`: Codex's raw output, for diagnosing a failed run. Follow-ups append to them.
