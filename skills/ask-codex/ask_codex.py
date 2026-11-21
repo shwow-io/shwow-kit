@@ -123,6 +123,8 @@ def main():
         run = new_run_folder()
     meta = run / META
     touch_last_used(meta)
+    last_file = meta / "last-message.txt"
+    last_file.unlink(missing_ok=True)
     before = snapshot(run)
 
     # The workspace-write sandbox blocks writes outside the run folder; exec never prompts for approval.
@@ -130,7 +132,7 @@ def main():
     cmd = [codex, "exec", "-s", "workspace-write"]
     if resumed:
         cmd.append("resume")
-    cmd += ["--skip-git-repo-check", "--json", "-o", str(meta / "last-message.txt")]
+    cmd += ["--skip-git-repo-check", "--json", "-o", str(last_file)]
     if args.model:
         cmd += ["-m", args.model]
     if resumed:
@@ -159,7 +161,6 @@ def main():
     touch_last_used(meta)
     after = snapshot(run)
     written = sorted(p for p, m in after.items() if before.get(p) != m)
-    last_file = meta / "last-message.txt"
     last = last_file.read_text(encoding="utf-8").strip() if last_file.exists() else ""
 
     print(f"Run folder: {run}")
