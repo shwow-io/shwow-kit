@@ -69,7 +69,12 @@ def sweep(keep=None):
 
 def follow_up_folder(name):
     """Return the run folder and session id to resume, or exit with one line saying what's wrong."""
-    run = ROOT / pathlib.Path(name).name
+    if not name.strip():
+        sys.exit("--follow-up needs a run folder name or path.")
+    run = (ROOT / name).resolve()
+    if run.parent != ROOT.resolve():
+        sys.exit(f"Not an ask-codex run folder: {name} is not directly under {ROOT}.")
+    run = ROOT / run.name
     try:
         session = (run / META / "session-id").read_text(encoding="utf-8").strip()
     except OSError:
@@ -112,7 +117,7 @@ def main():
         ap.error("no prompt given")
 
     codex = preflight()
-    run, resumed = follow_up_folder(args.follow_up) if args.follow_up else (None, None)
+    run, resumed = follow_up_folder(args.follow_up) if args.follow_up is not None else (None, None)
     sweep(keep=run)
     if run is None:
         run = new_run_folder()
