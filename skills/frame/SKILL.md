@@ -27,7 +27,7 @@ For T2, also write `design.md`: the interfaces between repos or components, key 
 
 When the work changes a contract, stored data, config or deploys, or touches another repo (always for T2), run the `impact` skill on the plan before confirming the brief. Breaking changes it finds become constraints in the brief or decisions for the user, so the design avoids them.
 
-Before confirming, read the repo's CLAUDE.md and AGENTS.md and check each outcome and recommendation in the brief against their rules. A conflict becomes a constraint in the brief or a question for the user, never a default.
+Before confirming, read the CLAUDE.md and AGENTS.md of every repo the work touches, including those in subfolders the work changes, and check each outcome and recommendation in the brief against their rules. A conflict becomes a constraint in the brief or a question for the user, never a default.
 
 Show the user the brief and confirm it. Once the brief is agreed, move to the `acceptance` skill.
 
