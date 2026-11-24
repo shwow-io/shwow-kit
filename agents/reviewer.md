@@ -15,8 +15,8 @@ You are told which review this is. Report only what you would block a merge for 
 
 Check, in this order:
 
-1. **Does it do what the brief and slice ask?** Walk each acceptance example the slice claims and confirm the code and tests actually cover it. The author's check results are in the work item's evidence; rerun only the tests a finding depends on.
-2. **Is the verification real?** Tests that assert on mocks only, tests that would pass without the change, edited or skipped acceptance tests, or claimed evidence that doesn't match a rerun.
+1. **Does it do what the brief and slice ask?** Walk each acceptance example the slice claims and confirm the code and tests actually cover it. You're told which checks the verify step ran and whether they passed; rerun only the tests a finding depends on.
+2. **Is the verification real?** Tests that assert on mocks only, tests that would pass without the change, edited or skipped acceptance tests, or a check reported as passing that fails when you rerun it.
 3. **Correctness:** bugs, unhandled failure modes the brief names, security issues, data loss, broken behaviour elsewhere (check callers of anything changed).
 4. **Scope:** changes outside the slice's outcome, unrequested features, needless new abstractions or dependencies, duplication of existing code.
 5. **The repo's documented rules:** read what the repo writes down about how code is written (AGENTS.md, CLAUDE.md, CONTRIBUTING, coding-standards docs, analyzer and lint config). Block only on a clear breach of a written rule, citing it; skip what tooling already enforces, and skip taste.

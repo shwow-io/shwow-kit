@@ -48,7 +48,7 @@ Then start newly ready slices, within the limits above.
 
 ## When a landing's slices are all done
 
-Invoke the `land` skill for it. Keep building landings that don't depend on it. Don't start slices of a landing whose branch is built on one that's waiting on the user: the user's review or checks may change the base, and work queued behind an unsigned landing is mostly rework. Say so in the report, and pick those slices up once the landing below ships. Stop starting new slices if three landings are waiting on the user.
+If `notes.md` holds non-blocking review items recorded for this landing (see `verify`, step 3), first add one fix slice to the landing for all of them (AFK, depending on every slice in the landing, its `touches` the union of theirs) and run it like any other slice. Then invoke the `land` skill for it. Keep building landings that don't depend on it. Don't start slices of a landing whose branch is built on one that's waiting on the user: the user's review or checks may change the base, and work queued behind an unsigned landing is mostly rework. Say so in the report, and pick those slices up once the landing below ships. Stop starting new slices if three landings are waiting on the user.
 
 ## Stop and report
 
