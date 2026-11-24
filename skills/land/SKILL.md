@@ -12,7 +12,7 @@ The unit is a landing from the work item's `landings.md`: its slices are already
 
 ## 1. Check it's ready
 
-Every slice in the landing is done (State in `${CLAUDE_PLUGIN_ROOT}/docs/work-items.md`), with evidence (`evidence/<slice-id>-checks.txt`) and an approving review (`evidence/<slice-id>-review.md`). Run any missing step first (`dispatch` or `verify`).
+Every slice in the landing is done (State in `${CLAUDE_PLUGIN_ROOT}/docs/work-items.md`), with evidence (`evidence/<slice-id>-checks.txt`) and an approving review (`evidence/<slice-id>-review.md`). Run any missing step first (`dispatch` or `verify`). Non-blocking review items recorded in `notes.md` for this landing are done (their fix slice merged) or listed for the user under anything surprising.
 
 Then check the landing as a whole, in its worktree: rebase or merge the current main line in if it has moved, and run every slice's verify command plus the repo's fast checks. Save the output to `evidence/<landing>-checks.txt`. A failure here goes back to `dispatch` as a fix slice, not to the user.
 
