@@ -28,7 +28,7 @@ For T0 work, a reviewer is optional when the change is tiny and fully covered by
 
 ## 3. Decide
 
-- **Checks pass and review approves:** the slice is ready to merge into its landing branch. Under `dispatch`, return to it; it merges without asking the user. Run on its own (no work item, or a T0 fix), hand over to the `land` skill.
+- **Checks pass and review approves:** the slice is ready to merge into its landing branch. Record the review's non-blocking items in the work item's `notes.md` under the landing and fix them together in one fix slice when the landing is reviewed, not in a round per slice. Send one back at once only if it changes behaviour the user will test on hardware, or affects safety or security. Under `dispatch`, return to it; it merges without asking the user. Run on its own (no work item, or a T0 fix), hand over to the `land` skill.
 - **Anything blocking:** list it and send the findings to the worker (or the user for HITL). The fix comes back through this skill with a fresh reviewer every round; don't approve a fix yourself. A slice still failing after its second fix round is blocked: add a `blocked:` line with the reason to the slice file, and ask the user.
 
 ## Report

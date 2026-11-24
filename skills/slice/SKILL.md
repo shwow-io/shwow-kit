@@ -15,6 +15,7 @@ Turn the brief into work that agents can run, mostly in parallel, and that the u
 - **Reviewable.** About 30 minutes of review for the user. If larger, split it.
 - **Explicit about touch points.** Which repo and area it changes. Two slices that edit the same files can't run in parallel; make one depend on the other.
 - **AFK or HITL.** AFK: specified and verifiable enough for an agent to finish alone. HITL: needs a human decision or judgement partway. Prefer AFK; when a slice is HITL, say what decision is needed.
+- **Shared schemas.** When slices that may be built on different branches add fields or message types to the same schema (a protobuf message, a database table, an API type), the slice files assign the field numbers or names now, so parallel branches can't collide.
 - **Services.** Whether verifying it needs running services (database, ports, external systems). Such slices don't run in parallel with each other.
 
 ## Landings
