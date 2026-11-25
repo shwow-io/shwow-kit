@@ -49,7 +49,8 @@ Contents of a work item are listed in [work-items.md](work-items.md). Durable de
 
 ## Isolation
 
-- Parallel writers get their own git worktree outside the working directory (`~/.shwow-kit/worktrees/<checkout>/<slice>`), removed once merged into the landing branch. If the repo already has a worktree layout, the agent may follow it instead.
+- Every worktree the kit creates, in any skill, goes under `~/.shwow-kit/worktrees/<checkout>/<name>`, where `<checkout>` is the folder name of the user's checkout. Never beside the checkout (`../<repo>-<name>`), inside it, or at a drive root. The one exception is a bare repo whose worktrees sit in its own folder (the `/wt` layout): new worktrees go there too. Existing sibling worktrees of a normal clone are not a convention to follow.
+- Parallel writers each get their own worktree there, removed once merged into the landing branch.
 - The scout reads without a worktree. Reviewers and verify that need to run code use a temporary worktree in the same place, removed afterwards; nothing touches the user's checkout.
 - Slices that need running services (ports, databases) declare it and don't run in parallel with each other.
 - Agents work out the repo layout (plain clone, bare with worktrees, monorepo) from what they see; the kit assumes none.

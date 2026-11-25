@@ -27,7 +27,7 @@ Before the first worker starts, list every step the user will have to do by hand
 Each landing has a branch (from `landings.md`), created from the repo's current main line the first time a slice of it starts. Each slice gets its own worktree and branch, created from its landing's branch, so it starts with every slice already merged there:
 
 - Default: `~/.shwow-kit/worktrees/<checkout>/<slice-id>-<short-name>`, where `<checkout>` is the folder name of the user's checkout (not the slice's `repo` field, which every clone shares). If the path already exists and is this slice's worktree from an earlier session (same branch, listed by `git worktree list`), reuse it; otherwise stop. Branch: `<landing branch>-<slice-id>`, or the repo's convention.
-- If the repo already uses a worktree layout (bare repo with sibling worktrees, a `worktrees/` folder), follow it instead.
+- If the repo is a bare repo whose worktrees sit in its own folder (the `/wt` layout), put them there instead. Worktrees beside a normal clone are not a layout to follow.
 - The landing branch gets its own worktree (`~/.shwow-kit/worktrees/<checkout>/<landing branch with / as ->`) for merging into.
 
 Create worktrees yourself before starting a worker, so paths and branches are known. Never let a worker run in the user's checkout, and never check out a branch there.

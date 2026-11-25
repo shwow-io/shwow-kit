@@ -24,7 +24,7 @@ For a bug or change to existing behaviour, also list what must **not** change.
 
 ## 3. Make them executable
 
-Where the repo has a suitable test level, write the examples as failing tests in the repo, next to similar tests and in the repo's style. Run them and confirm they fail for the right reason (missing behaviour, not a broken test). Any new test that passes now must be a deliberate "must not change" guard; otherwise it passes by accident (e.g. an unknown command exits with the same code) and needs tightening.
+Where the repo has a suitable test level, write the examples as failing tests in the repo, next to similar tests and in the repo's style. Write them in the landing's worktree, `~/.shwow-kit/worktrees/<checkout>/<landing branch with / as ->` (created from the main line if missing, on the landing branch), which `dispatch` reuses; never in the user's checkout or a worktree beside it. Run them and confirm they fail for the right reason (missing behaviour, not a broken test). Any new test that passes now must be a deliberate "must not change" guard; otherwise it passes by accident (e.g. an unknown command exits with the same code) and needs tightening.
 
 Where nothing executable fits (docs, config, prose, infrastructure without a dry-run), say how the example will be checked instead: a command with expected output, or an independent review against that example.
 

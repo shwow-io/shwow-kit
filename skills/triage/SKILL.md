@@ -26,7 +26,7 @@ When torn between two tiers, pick the lower and say what would bump it up.
 
 **A bug whose cause isn't proven yet** (something broken, flaky or slow, with no obvious single-line cause): run the `diagnose` skill first, whatever the tier. Its proven cause and failing check are what the fix, or the work item, starts from.
 
-**T0:** no work item. Do it now:
+**T0:** no work item. Do it now, in a worktree at `~/.shwow-kit/worktrees/<checkout>/<short-name>` (never the user's checkout or a folder beside it):
 1. Write a test that reproduces the problem and run it: show it failing before changing code. Only if no test fits, reproduce by hand or name the check that will prove the fix.
 2. Make the change.
 3. Verify (the `verify` skill's rules apply: evidence, not claims).
